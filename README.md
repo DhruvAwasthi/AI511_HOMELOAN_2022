@@ -50,7 +50,7 @@ Tags: Tabular Data
   - **sample_solution.csv -** a sample submission file in the correct format
   - **columns_description.csv -** supplemental information about the data; read this to know more about the columns in `train_data.csv`.
   - Evaluation:
-- Submission:
+- Evaluation:
   - Submissions are evaluated on TARGET column using the Macro F Score. 
-  - For each SK_ID_CURR in the test set, you must predict the TARGET i.e predict if the customer with that ID will default their loan or not.
+  - For each `SK_ID_CURR` in the test set, you must predict the `TARGET` i.e predict if the customer with that ID will default their loan or not.
 

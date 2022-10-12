@@ -1,2 +1,5 @@
 # ignore Pycharm's project specific settings files
 .idea/
+
+# ignore jupyter notebook checkpoints
+notebooks/.ipynb_checkpoints/

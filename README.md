@@ -29,6 +29,12 @@ Tags: Tabular Data
    2. **Roll number -** MS2022004 
    3. **Email address -** ashok.senapati@iiitb.ac.in 
   
+
+### Project Evaluation:
+Project will be evaluated based on:
+1. Kaggle metrics
+2. Final report and code
+3. Intermediate evaluations and slack discussions
   
 ### Project Milestones:
 - **First milestone -** Week of October 17th
@@ -51,6 +57,6 @@ Tags: Tabular Data
   - **columns_description.csv -** supplemental information about the data; read this to know more about the columns in `train_data.csv`.
   - Evaluation:
 - Evaluation:
-  - Submissions are evaluated on TARGET column using the Macro F Score. 
+  - Submissions are evaluated on `TARGET` column using the Macro F Score. 
   - For each `SK_ID_CURR` in the test set, you must predict the `TARGET` i.e predict if the customer with that ID will default their loan or not.
 

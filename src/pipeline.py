@@ -50,39 +50,53 @@ class Pipeline:
 
         if train:
             try:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading train dataset...")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"loading train dataset...")
                 train_df = load_dataset(self.config_info.paths["train_data_path"])
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} train dataset loaded successfully")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"train dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to load train dataset")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused - {str(e)}")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to load train dataset")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
                 return
 
             self.train_model(train_df)
 
         elif test:
             try:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading test dataset...")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"loading test dataset...")
                 test_df = load_dataset(self.config_info.paths["test_data_path"])
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} test dataset loaded successfully")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"test dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to load train dataset")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused - {str(e)}")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to load train dataset")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
                 return
 
             self.test_model(test_df)
 
         elif train_and_test:
             try:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading train dataset...")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"loading train dataset...")
                 train_df = load_dataset(self.config_info.paths["train_data_path"])
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} train dataset loaded successfully")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading test dataset...")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"train dataset loaded successfully")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"loading test dataset...")
                 test_df = load_dataset(self.config_info.paths["test_data_path"])
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} test dataset loaded successfully")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"test dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to load datasets")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused - {str(e)}")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to load datasets")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
                 return
 
             self.train_and_test_model(train_df, test_df)

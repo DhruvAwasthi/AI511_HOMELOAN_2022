@@ -1,3 +1,6 @@
+"""
+Module contains all the configuration details for the entire project
+"""
 import os
 
 # set directory paths

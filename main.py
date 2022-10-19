@@ -1,3 +1,6 @@
+"""
+Main module that contains tools to run the project
+"""
 import argparse
 import logging
 import os

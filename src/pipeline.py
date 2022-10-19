@@ -1,3 +1,6 @@
+"""
+Module contains tools to run build the entire pipeline of project
+"""
 import logging
 from datetime import datetime
 from typing import NoReturn
@@ -47,7 +50,23 @@ class Pipeline:
         test: bool = False,
         train_and_test: bool = False,
     ) -> NoReturn:
+        """
+        Run the entire project as a pipeline.
 
+        To run, we can give options either to run the entire pipeline, or to
+        run only a part of it i.e. training only, testing only, or training and
+        testing both.
+
+        Args:
+            train: bool
+                Set to true if only training needs to be done.
+            test: bool
+                Set to true if only testing needs to be done.
+            train_and_test:
+                Set to true if both training and testing needs to be done.
+
+        Returns:
+        """
         if train:
             try:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "

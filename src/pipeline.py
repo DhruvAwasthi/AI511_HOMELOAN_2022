@@ -81,7 +81,14 @@ class Pipeline:
                             f"error caused - {str(e)}")
                 return
 
-            self.train_model(train_df)
+            try:
+                self.train_model(train_df)
+            except Exception as e:
+                print(f"failed to train model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to train model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
 
         elif test:
             try:
@@ -97,7 +104,14 @@ class Pipeline:
                             f"error caused - {str(e)}")
                 return
 
-            self.test_model(test_df)
+            try:
+                self.test_model(test_df)
+            except Exception as e:
+                print(f"failed to test model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to test model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
 
         elif train_and_test:
             try:
@@ -118,5 +132,12 @@ class Pipeline:
                             f"error caused - {str(e)}")
                 return
 
-            self.train_and_test_model(train_df, test_df)
+            try:
+                self.train_and_test_model(train_df, test_df)
+            except Exception as e:
+                print(f"failed to train and test model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"failed to train and test model")
+                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                            f"error caused - {str(e)}")
         return

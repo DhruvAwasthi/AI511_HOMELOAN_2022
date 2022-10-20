@@ -202,16 +202,27 @@ def handle_outliers(
             Pandas DataFrame with outliers handled.
     """
     for column in list(df.select_dtypes(exclude=["object"]).columns):
-        iqr_range, lower_bound, upper_bound = calculate_iqr_range(
-            df[column],
-            scaled_factor=outliers_handling_configuration["scaled_factor"],
-            percentile_range=outliers_handling_configuration["percentile_range"],
-        )
+        try:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling"
+                f"outlier for column {column}")
+            iqr_range, lower_bound, upper_bound = calculate_iqr_range(
+                df[column],
+                scaled_factor=outliers_handling_configuration["scaled_factor"],
+                percentile_range=outliers_handling_configuration["percentile_range"],
+            )
 
-        index_of_outliers = df[
-            (df[column] > upper_bound) | (df[column] < lower_bound)].index
-        median_of_column = df[column].dropna().median()
-        df.loc[index_of_outliers, column] = median_of_column
+            index_of_outliers = df[
+                (df[column] > upper_bound) | (df[column] < lower_bound)].index
+            median_of_column = df[column].dropna().median()
+            df.loc[index_of_outliers, column] = median_of_column
+        except Exception as e:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
+                f"handle outliers for column {column}")
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused -"
+                f"{str(e)}")
     return df
 
 

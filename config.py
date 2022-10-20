@@ -32,6 +32,11 @@ preprocess_configuration["unnecessary_columns"] = [
         "DEF_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
     ]
 
+# set configuration for handling outliers
+preprocess_configuration["outliers"] = dict()
+preprocess_configuration["outliers"]["percentile_range"] = (10, 90)
+preprocess_configuration["outliers"]["scaled_factor"] = 1.7
+
 # set configuration for machine learning model
 model_configuration = dict()
 model_configuration["random_state"] = 42

@@ -6,6 +6,8 @@ from datetime import datetime
 
 from pandas.core.frame import DataFrame
 
+from src.helpers import calculate_iqr_range
+
 logger = logging.getLogger(__name__)
 
 
@@ -181,6 +183,38 @@ def deal_missing_value_for_numerical_columns(
     return df
 
 
+def handle_outliers(
+    df: DataFrame,
+    outliers_handling_configuration: dict,
+) -> DataFrame:
+    """
+    Deals with outliers present in the columns.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame in which outliers needs to be handled.
+        outliers_handling_configuration: dict
+            It contains key-value pairs defining how to handle outliers, and
+            other important factors.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrame with outliers handled.
+    """
+    for column in list(df.select_dtypes(exclude=["object"]).columns):
+        iqr_range, lower_bound, upper_bound = calculate_iqr_range(
+            df[column],
+            scaled_factor=outliers_handling_configuration["scaled_factor"],
+            percentile_range=outliers_handling_configuration["percentile_range"],
+        )
+
+        index_of_outliers = df[
+            (df[column] > upper_bound) | (df[column] < lower_bound)].index
+        median_of_column = df[column].dropna().median()
+        df.loc[index_of_outliers, column] = median_of_column
+    return df
+
+
 def preprocess_data(
         df: DataFrame,
         preprocessing_configuration: dict,
@@ -224,6 +258,9 @@ def preprocess_data(
         # drop unnecessary columns
         df = drop_unnecessary_columns(df, preprocessing_configuration[
                                         "unnecessary_columns"])
+
+        # handle outliers
+        df = handle_outliers(df, preprocessing_configuration["outliers"])
 
         # deal with missing values for categorical columns
         df = deal_missing_value_for_categorical_columns(df)

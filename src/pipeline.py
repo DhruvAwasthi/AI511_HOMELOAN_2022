@@ -6,8 +6,10 @@ from datetime import datetime
 from typing import NoReturn
 
 from pandas.core.frame import DataFrame
+from sklearn.model_selection import train_test_split
 
 from src.helpers import load_dataset
+from src.preprocess import preprocess_data
 
 logger = logging.getLogger(__name__)
 
@@ -15,43 +17,71 @@ logger = logging.getLogger(__name__)
 class Pipeline:
     def __init__(self, config_info):
         self.config_info = config_info
-
-    def preprocess_data(
-        self,
-        df: DataFrame,
-    ):
-        return
+        self.preprocessing_configuration = config_info.preprocessing_configuration
+        self.model_configuration = config_info.model_configuration
 
     def build_model(self):
         return
 
     def train_model(
-        self,
-        train_df: DataFrame,
-    ):
+            self,
+            train_df: DataFrame,
+    ) -> NoReturn:
+        """
+        Trains the machine learning model.
+
+        It takes the data in pandas DataFrame format, preprocesses it, builds a
+        model on top it, trains it, and saves it.
+
+        Args:
+            train_df: DataFrame
+                Pandas dataframe containing the labels and predictors that will
+                be used for training the machine learning model.
+
+        Returns:
+
+        """
+        # preprocess the dataset
+        preprocessed_df = preprocess_data(train_df,
+                                          self.preprocessing_configuration,
+                                          is_train_data=True
+                                          )
+
+        # separate the predictors and the labels
+        predictors = preprocessed_df.drop("TARGET", axis=1)
+        labels = preprocessed_df["TARGET"].copy()
+
+        # split the data into train set and validation set
+        X_train, X_val, y_train, y_val = train_test_split(
+            predictors,
+            labels,
+            test_size=self.config_info.model_configuration["test_size"],
+            random_state=self.config_info.model_configuration["random_state"],
+        )
+
         return
 
     def test_model(
-        self,
-        test_df: DataFrame,
+            self,
+            test_df: DataFrame,
     ):
         return
 
     def train_and_test_model(
-        self,
-        train_df: DataFrame,
-        test_df: DataFrame,
+            self,
+            train_df: DataFrame,
+            test_df: DataFrame,
     ):
         return
 
     def run(
-        self,
-        train: bool = False,
-        test: bool = False,
-        train_and_test: bool = False,
+            self,
+            train: bool = False,
+            test: bool = False,
+            train_and_test: bool = False,
     ) -> NoReturn:
         """
-        Run the entire project as a pipeline.
+        Runs the entire project as a pipeline.
 
         To run, we can give options either to run the entire pipeline, or to
         run only a part of it i.e. training only, testing only, or training and
@@ -71,7 +101,8 @@ class Pipeline:
             try:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"loading train dataset...")
-                train_df = load_dataset(self.config_info.paths["train_data_path"])
+                train_df = load_dataset(
+                    self.config_info.paths["train_data_path"])
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"train dataset loaded successfully")
             except Exception as e:
@@ -94,7 +125,8 @@ class Pipeline:
             try:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"loading test dataset...")
-                test_df = load_dataset(self.config_info.paths["test_data_path"])
+                test_df = load_dataset(
+                    self.config_info.paths["test_data_path"])
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"test dataset loaded successfully")
             except Exception as e:
@@ -117,12 +149,14 @@ class Pipeline:
             try:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"loading train dataset...")
-                train_df = load_dataset(self.config_info.paths["train_data_path"])
+                train_df = load_dataset(
+                    self.config_info.paths["train_data_path"])
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"train dataset loaded successfully")
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"loading test dataset...")
-                test_df = load_dataset(self.config_info.paths["test_data_path"])
+                test_df = load_dataset(
+                    self.config_info.paths["test_data_path"])
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"test dataset loaded successfully")
             except Exception as e:

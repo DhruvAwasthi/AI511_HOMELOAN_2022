@@ -63,13 +63,79 @@ def drop_columns_with_low_std(
             Pandas DataFrame after dropping column with low standard deviation
             value.
     """
-    columns_with_std_lt_std_value = df.std()[df.std() < std_value].index.values
-    if columns_with_std_lt_std_value > 0:
+    try:
+        columns_with_std_lt_std_value = df.std()[df.std() < std_value].index.values
+        if columns_with_std_lt_std_value > 0:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {len(columns_with_std_lt_std_value)}"
+                f"column(s) have standard deviation value less than {std_value}. "
+                f"Hence, dropping the columns: {', '.join(columns_with_std_lt_std_value)}")
+        df = df.drop(columns_with_std_lt_std_value, axis=1, errors="ignore")
         logger.info(
-            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {len(columns_with_std_lt_std_value)}"
-            f"column(s) have standard deviation value less than {std_value}. "
-            f"Hence, dropping the columns: {', '.join(columns_with_std_lt_std_value)}")
-    df = df.drop(columns_with_std_lt_std_value, axis=1)
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+            f"dropped columns with low standard deviation value")
+    except Exception as e:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} couldn't"
+                    f"delete columns with low standard deviation value")
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
+            f"{str(e)}")
+    return df
+
+
+def drop_unnecessary_columns(
+        df: DataFrame,
+) -> DataFrame:
+    """
+    Removes the columns that does not contribute to the learning.
+
+    There are many columns that either contain redundant values from other
+    columns or doesn't contain relevant information that might help in learning
+    of the machine learning model. Moreover, they add noise to the training
+    data and harm the learning of the model.
+    Hence, it is better to drop such columns.
+
+    Args:
+        df: DataFrame
+        Pandas DataFrame from which necessary columns need to be dropped.
+
+    Returns:
+        DataFrame:
+        Pandas DataFrame after removing unnecessary columns.
+
+    """
+    unnecessary_columns_to_drop = [
+        "FLAG_EMP_PHONE",  # office phone number is not important
+        "FLAG_WORK_PHONE",  # home phone number is not important
+        "WEEKDAY_APPR_PROCESS_START",  # does not matter on what day the loan is applied for
+        "HOUR_APPR_PROCESS_START",  # does not matter during what hour the loan is applied for
+        "REG_REGION_NOT_LIVE_REGION",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        "REG_REGION_NOT_WORK_REGION",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        "LIVE_REGION_NOT_WORK_REGION",  # contact address and work address (region) are different addresses, and does not matter if they match or not
+        "REG_CITY_NOT_LIVE_CITY",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        "REG_CITY_NOT_WORK_CITY",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        "LIVE_CITY_NOT_WORK_CITY",  # contact address and work address (region) are different addresses, and does not matter if they match or not,
+        "DAYS_LAST_PHONE_CHANGE",  # phone change information does not reveal something important as one can change phone due to multiple things,
+        "OBS_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "DEF_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "OBS_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "DEF_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+    ]
+
+    try:
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} Dropping unnecessary "
+            f"columns: {', '.join(unnecessary_columns_to_drop)}")
+        df = df.drop(unnecessary_columns_to_drop, axis=1, errors="ignore")
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+            f"dropped unnecessary columns")
+    except Exception as e:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} couldn't"
+                    f"delete unnecessary columns")
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
+            f"{str(e)}")
     return df
 
 
@@ -106,7 +172,7 @@ def preprocess_data(
         df = remove_duplicate_rows(df)
 
         # drop unique ID column as it doesn't contribute to the learning
-        df = df.drop(["SK_ID_CURR"], axis=1)
+        df = df.drop(["SK_ID_CURR"], axis=1, errors="ignore")
 
         # drop columns with low standard deviation values
         df = drop_columns_with_low_std(df,

@@ -85,6 +85,7 @@ def drop_columns_with_low_std(
 
 def drop_unnecessary_columns(
         df: DataFrame,
+        unnecessary_columns: list,
 ) -> DataFrame:
     """
     Removes the columns that does not contribute to the learning.
@@ -97,36 +98,22 @@ def drop_unnecessary_columns(
 
     Args:
         df: DataFrame
-        Pandas DataFrame from which necessary columns need to be dropped.
+            Pandas DataFrame from which necessary columns need to be dropped.
+        unnecessary_columns: list
+            A list containing all the unnecessary columns that needs to be
+            dropped.
 
     Returns:
         DataFrame:
-        Pandas DataFrame after removing unnecessary columns.
+            Pandas DataFrame after removing unnecessary columns.
 
     """
-    unnecessary_columns_to_drop = [
-        "FLAG_EMP_PHONE",  # office phone number is not important
-        "FLAG_WORK_PHONE",  # home phone number is not important
-        "WEEKDAY_APPR_PROCESS_START",  # does not matter on what day the loan is applied for
-        "HOUR_APPR_PROCESS_START",  # does not matter during what hour the loan is applied for
-        "REG_REGION_NOT_LIVE_REGION",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
-        "REG_REGION_NOT_WORK_REGION",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
-        "LIVE_REGION_NOT_WORK_REGION",  # contact address and work address (region) are different addresses, and does not matter if they match or not
-        "REG_CITY_NOT_LIVE_CITY",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
-        "REG_CITY_NOT_WORK_CITY",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
-        "LIVE_CITY_NOT_WORK_CITY",  # contact address and work address (region) are different addresses, and does not matter if they match or not,
-        "DAYS_LAST_PHONE_CHANGE",  # phone change information does not reveal something important as one can change phone due to multiple things,
-        "OBS_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
-        "DEF_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
-        "OBS_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
-        "DEF_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
-    ]
 
     try:
         logger.info(
-            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} Dropping unnecessary "
-            f"columns: {', '.join(unnecessary_columns_to_drop)}")
-        df = df.drop(unnecessary_columns_to_drop, axis=1, errors="ignore")
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} dropping unnecessary "
+            f"columns: {', '.join(unnecessary_columns)}")
+        df = df.drop(unnecessary_columns, axis=1, errors="ignore")
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
             f"dropped unnecessary columns")
@@ -136,6 +123,61 @@ def drop_unnecessary_columns(
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
             f"{str(e)}")
+    return df
+
+
+def encode_categorical_columns(
+    df: DataFrame,
+) -> DataFrame:
+    """
+    Encode categorical columns for building the model.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame in which categorical columns needs to be encoded.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrame after encoding all the categorical columns
+    """
+    return df
+
+
+def deal_missing_value_for_categorical_columns(
+    df: DataFrame,
+) -> DataFrame:
+    """
+    Deals with missing values for categorical columns.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame in which missing values needs to be dealt in
+            categorical columns.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrame after dealing with missing values in all
+            categorical columns.
+    """
+    return df
+
+
+def deal_missing_value_for_numerical_columns(
+    df: DataFrame,
+) -> DataFrame:
+    """
+    Deals with missing values for numerical columns.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame in which missing values needs to be dealt in
+            numerical columns.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrame after dealing with missing values in all numerical
+            columns.
+    """
     return df
 
 
@@ -177,8 +219,20 @@ def preprocess_data(
         # drop columns with low standard deviation values
         df = drop_columns_with_low_std(df,
                                        preprocessing_configuration[
-                                           "drop_columns_below_std"]
-                                       )
+                                           "drop_columns_below_std"])
+
+        # drop unnecessary columns
+        df = drop_unnecessary_columns(df, preprocessing_configuration[
+                                        "unnecessary_columns"])
+
+        # deal with missing values for categorical columns
+        df = deal_missing_value_for_categorical_columns(df)
+
+        # deal with missing values for numerical columns
+        df = deal_missing_value_for_numerical_columns(df)
+
+        # encode categorical columns
+        df = encode_categorical_columns(df)
 
     elif is_test_data:
         pass

@@ -15,6 +15,7 @@ paths["test_data_path"] = os.path.join(DATA_DIR, "test_data.csv")
 preprocess_configuration = dict()
 preprocess_configuration["drop_columns_below_std"] = 0.02
 preprocess_configuration["unnecessary_columns"] = [
+        "SK_ID_CURR",  # this is just a unique identifier for each row
         "FLAG_EMP_PHONE",  # office phone number is not important
         "FLAG_WORK_PHONE",  # home phone number is not important
         "WEEKDAY_APPR_PROCESS_START",  # does not matter on what day the loan is applied for

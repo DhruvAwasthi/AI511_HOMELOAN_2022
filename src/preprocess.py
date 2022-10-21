@@ -67,17 +67,17 @@ def drop_columns_with_low_std(
     """
     try:
         columns_with_std_lt_std_value = df.std()[df.std() < std_value].index.values
-        if columns_with_std_lt_std_value > 0:
+        if len(columns_with_std_lt_std_value) > 0:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {len(columns_with_std_lt_std_value)}"
-                f"column(s) have standard deviation value less than {std_value}. "
+                f" column(s) have standard deviation value less than {std_value}. "
                 f"Hence, dropping the columns: {', '.join(columns_with_std_lt_std_value)}")
         df = df.drop(columns_with_std_lt_std_value, axis=1, errors="ignore")
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
             f"dropped columns with low standard deviation value")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} couldn't"
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} could not"
                     f"delete columns with low standard deviation value")
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
@@ -113,8 +113,8 @@ def drop_unnecessary_columns(
 
     try:
         logger.info(
-            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} dropping unnecessary "
-            f"columns: {', '.join(unnecessary_columns)}")
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} dropping {len(unnecessary_columns)} "
+            f"unnecessary columns: {', '.join(unnecessary_columns)}")
         df = df.drop(unnecessary_columns, axis=1, errors="ignore")
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
@@ -204,8 +204,8 @@ def handle_outliers(
     for column in list(df.select_dtypes(exclude=["object"]).columns):
         try:
             logger.info(
-                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling"
-                f"outlier for column {column}")
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling "
+                f"outlier(s) for column {column}")
             iqr_range, lower_bound, upper_bound = calculate_iqr_range(
                 df[column],
                 scaled_factor=outliers_handling_configuration["scaled_factor"],
@@ -257,9 +257,6 @@ def preprocess_data(
     if is_train_data:
         # remove duplicate rows
         df = remove_duplicate_rows(df)
-
-        # drop unique ID column as it doesn't contribute to the learning
-        df = df.drop(["SK_ID_CURR"], axis=1, errors="ignore")
 
         # drop columns with low standard deviation values
         df = drop_columns_with_low_std(df,

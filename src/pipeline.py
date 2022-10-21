@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class Pipeline:
     def __init__(self, config_info):
         self.config_info = config_info
-        self.preprocessing_configuration = config_info.preprocessing_configuration
+        self.preprocessing_configuration = config_info.preprocess_configuration
         self.model_configuration = config_info.model_configuration
 
     def build_model(self):
@@ -100,7 +100,7 @@ class Pipeline:
         if train:
             try:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                            f"loading train dataset...")
+                            f"loading train dataset")
                 train_df = load_dataset(
                     self.config_info.paths["train_data_path"])
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "

@@ -68,15 +68,21 @@ def drop_columns_with_low_std(
     try:
         columns_with_std_lt_std_value = df.std()[
             df.std() < std_value].index.values
+        pickle_dump_object(list(columns_with_std_lt_std_value),
+                           "columns_with_std_lt_std_value.pkl")
         if len(columns_with_std_lt_std_value) > 0:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {len(columns_with_std_lt_std_value)}"
                 f" column(s) have standard deviation value less than {std_value}. "
                 f"Hence, dropping the columns: {', '.join(columns_with_std_lt_std_value)}")
-        df = df.drop(columns_with_std_lt_std_value, axis=1, errors="ignore")
-        logger.info(
-            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
-            f"dropped columns with low standard deviation value")
+            df = df.drop(columns_with_std_lt_std_value, axis=1, errors="ignore")
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+                f"dropped columns with low standard deviation value")
+        else:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} there "
+                f"are no columns with standard deviation value lower than defined")
     except Exception as e:
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} could not"
                     f"delete columns with low standard deviation value")
@@ -88,7 +94,6 @@ def drop_columns_with_low_std(
 
 def drop_unnecessary_columns(
         df: DataFrame,
-        unnecessary_columns: list,
 ) -> DataFrame:
     """
     Removes the columns that does not contribute to the learning.
@@ -102,15 +107,32 @@ def drop_unnecessary_columns(
     Args:
         df: DataFrame
             Pandas DataFrame from which necessary columns need to be dropped.
-        unnecessary_columns: list
-            A list containing all the unnecessary columns that needs to be
-            dropped.
 
     Returns:
         DataFrame:
             Pandas DataFrame after removing unnecessary columns.
 
     """
+    unnecessary_columns = [
+        "SK_ID_CURR",  # this is just a unique identifier for each row
+        "FLAG_EMP_PHONE",  # office phone number is not important
+        "FLAG_WORK_PHONE",  # home phone number is not important
+        "WEEKDAY_APPR_PROCESS_START",  # does not matter on what day the loan is applied for
+        "HOUR_APPR_PROCESS_START",  # does not matter during what hour the loan is applied for
+        "REG_REGION_NOT_LIVE_REGION",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        "REG_REGION_NOT_WORK_REGION",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        "LIVE_REGION_NOT_WORK_REGION",  # contact address and work address (region) are different addresses, and does not matter if they match or not
+        "REG_CITY_NOT_LIVE_CITY",  # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        "REG_CITY_NOT_WORK_CITY",  # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        "LIVE_CITY_NOT_WORK_CITY",  # contact address and work address (region) are different addresses, and does not matter if they match or not,
+        "DAYS_LAST_PHONE_CHANGE",  # phone change information does not reveal something important as one can change phone due to multiple things,
+        "OBS_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "DEF_30_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "OBS_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+        "DEF_60_CNT_SOCIAL_CIRCLE",  # surroundings is biased and does not reveal anything about the person's character
+    ]
+
+    pickle_dump_object(unnecessary_columns, "unnecessary_columns.pkl")
 
     try:
         logger.info(
@@ -349,8 +371,7 @@ def preprocess_data(
                                            "drop_columns_below_std"])
 
         # drop unnecessary columns
-        df = drop_unnecessary_columns(df, preprocessing_configuration[
-            "unnecessary_columns"])
+        df = drop_unnecessary_columns(df)
 
         # handle outliers
         df = handle_outliers(df, preprocessing_configuration["outliers"])

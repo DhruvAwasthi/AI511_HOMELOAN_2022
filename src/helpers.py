@@ -9,6 +9,7 @@ from typing import Any, NoReturn, Union
 
 import numpy as np
 import pandas as pd
+from category_encoders.hashing import HashingEncoder
 from pandas.core.frame import DataFrame
 from pandas.core.series import Series
 
@@ -198,3 +199,79 @@ def pickle_load_object(
                     f"caused - {str(e)}")
         return None
     return loaded_object
+
+
+def feature_hashing_encoder(
+    df: DataFrame,
+    columns: list,
+    dimensions_to_use: int,
+) -> HashingEncoder:
+    """
+    Trains a hashing encoder to encode categorical columns.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame containing the entire dataset, to be used for
+            training the hashing encoder.
+        columns: list
+            List of columns to encode using hashing encoder.
+        dimensions_to_use: int
+            Number of bits to use for hash encoding of given columns/
+
+    Returns:
+        HashingEncoder:
+            Trained hashing encoder that can be used to transform data.
+    """
+    hashing_encoder = None
+    try:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
+                    f"hash encoder for feature encoding")
+        predictors = df.iloc[:, :-1]
+        labels = df.iloc[:, -1]
+        hashing_encoder = HashingEncoder(
+            cols=columns, n_components=dimensions_to_use).fit(predictors, labels)
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} hash "
+                    f"encoder for feature hashing trained successfully")
+    except Exception as e:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
+                    f"train hashing encoder for feature hashing")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+                    f"caused - {str(e)}")
+    return hashing_encoder
+
+
+def transform_data_using_hashing_encoder(
+    df: DataFrame,
+    hashing_encoder: HashingEncoder,
+) -> DataFrame:
+    """
+    Encodes the categorical columns using hashing encoder.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame containing the data to encode.
+        hashing_encoder: HashingEncoder
+            HashingEncoder that will be used to encode the categorical data.
+
+    Returns:
+        DataFrame
+            Pandas DataFrame with encoded categorical columns using hashing
+            encoder.
+    """
+    try:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} encoding "
+                    f"categorical data using hashing encoder")
+        label_column = df.columns[-1]
+        predictors = df.iloc[:, :-1]
+        labels = df.iloc[:, -1]
+        df = hashing_encoder.transform(predictors)
+        df[label_column] = labels
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+                    f"encoded categorical data using hashing encoder")
+    except Exception as e:
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to encode"
+            f"categorical data using hashing encoder")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+                    f"caused - {str(e)}")
+    return df

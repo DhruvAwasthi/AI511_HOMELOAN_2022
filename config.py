@@ -17,6 +17,7 @@ paths["test_data_path"] = os.path.join(DATASET_DIR, "test_data.csv")
 # set configuration for preprocessing
 preprocess_configuration = dict()
 preprocess_configuration["drop_columns_below_std"] = 0.02
+preprocess_configuration["dimension_for_hashing"] = 16
 
 # set configuration for handling outliers
 preprocess_configuration["outliers"] = dict()

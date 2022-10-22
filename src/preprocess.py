@@ -6,7 +6,8 @@ from datetime import datetime
 
 from pandas.core.frame import DataFrame
 
-from src.helpers import calculate_iqr_range, pickle_dump_object
+from src.helpers import calculate_iqr_range, feature_hashing_encoder, \
+    pickle_dump_object, transform_data_using_hashing_encoder
 
 logger = logging.getLogger(__name__)
 
@@ -167,6 +168,7 @@ def drop_unnecessary_columns(
 
 def encode_categorical_columns(
         df: DataFrame,
+        dimensions_for_hashing: int,
 ) -> DataFrame:
     """
     Encode categorical columns for building the model.
@@ -179,6 +181,36 @@ def encode_categorical_columns(
         DataFrame:
             Pandas DataFrame after encoding all the categorical columns
     """
+    # encode columns with two unique values
+    df["NAME_CONTRACT_TYPE"].replace({"Cash loans": 1, "Revolving loans": 0}, inplace=True)
+    df["FLAG_OWN_CAR"].replace({"Y": 1, "N": 0}, inplace=True)
+    df["FLAG_OWN_REALTY"].replace({"Y": 1, "N": 0}, inplace=True)
+
+    # columns to encode using hashing encoder
+    columns_using_hashing_encoder = [
+        "OCCUPATION_TYPE",
+        "ORGANIZATION_TYPE",
+        "CODE_GENDER",
+        "NAME_TYPE_SUITE",
+        "NAME_INCOME_TYPE",
+        "NAME_EDUCATION_TYPE",
+        "NAME_FAMILY_STATUS",
+        "NAME_HOUSING_TYPE",
+        "FONDKAPREMONT_MODE",
+        "HOUSETYPE_MODE",
+        "WALLSMATERIAL_MODE",
+        "EMERGENCYSTATE_MODE",
+    ]
+
+    # train hashing encoder
+    hashing_encoder = feature_hashing_encoder(
+                            df,
+                            columns=columns_using_hashing_encoder,
+                            dimensions_to_use=dimensions_for_hashing)
+    # save hashing encoder for test data
+    pickle_dump_object(hashing_encoder, "hashing_encoder.pkl")
+    # transform data using hashing encoder
+    df = transform_data_using_hashing_encoder(df, hashing_encoder)
     return df
 
 
@@ -477,7 +509,7 @@ def preprocess_data(
         df = deal_missing_value_for_numerical_columns(df)
 
         # encode categorical columns
-        df = encode_categorical_columns(df)
+        df = encode_categorical_columns(df, preprocessing_configuration["dimension_for_hashing"])
 
     elif is_test_data:
         pass

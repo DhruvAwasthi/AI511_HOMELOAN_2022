@@ -65,7 +65,7 @@ def create_dirs(
     else:
         print(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {log_dir_path} "
-            f"already exists")
+            f"exists")
 
     # create dump directory
     if not os.path.exists(dump_dir_path):
@@ -79,7 +79,7 @@ def create_dirs(
     else:
         print(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {dump_dir_path} "
-            f"already exists")
+            f"exists")
 
     # create figures directory
     if not os.path.exists(figures_dir_path):
@@ -93,7 +93,7 @@ def create_dirs(
     else:
         print(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {figures_dir_path} "
-            f"already exists")
+            f"exists")
 
     return
 

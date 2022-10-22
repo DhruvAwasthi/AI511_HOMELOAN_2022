@@ -510,7 +510,7 @@ def preprocess_data(
         df: DataFrame,
         preprocessing_configuration: dict,
         is_train_data: bool = False,
-        is_test_data: bool = True,
+        is_test_data: bool = False,
 ) -> DataFrame:
     """
     Do all the preprocessing of data before feeding it to the learning
@@ -565,6 +565,70 @@ def preprocess_data(
             preprocessing_configuration["train_hash_encoder"])
 
     elif is_test_data:
-        pass
 
+        # drop columns with low standard deviation values
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} dropping "
+            f"columns with lwo standard deviation value ")
+        columns_with_std_lt_std_value = pickle_load_object(
+                    "columns_with_std_lt_std_value.pkl")
+        df = df.drop(columns_with_std_lt_std_value, axis=1,
+                     errors="ignore")
+
+        # drop unnecessary columns
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} dropping "
+            f"unnecessary columns")
+        unnecessary_columns = pickle_load_object("unnecessary_columns.pkl")
+        unnecessary_columns.remove("SK_ID_CURR")
+        df = df.drop(unnecessary_columns, axis=1,
+                     errors="ignore")
+
+        # deal with missing values for categorical columns
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling missing "
+            f"values of categorical columns")
+        replacing_criteria_for_cat_features = pickle_load_object(
+            "replacing_criteria_for_cat_features.pkl")
+        for column_name, replace_with_value in replacing_criteria_for_cat_features.items():
+            df[column_name].fillna(replace_with_value, inplace=True)
+
+        # deal with missing values for numerical columns
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling missing "
+            f"values of numerical columns")
+        replacing_criteria_for_num_features = pickle_load_object(
+            "replacing_criteria_for_num_features.pkl")
+        for column_name, replace_with_value in replacing_criteria_for_num_features.items():
+            df[column_name].fillna(replace_with_value, inplace=True)
+
+        # scale numeric features
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} scaling numeric "
+            f"features")
+        scaler = pickle_load_object("scaler.pkl")
+        unique_identifier_column = df[["SK_ID_CURR"]]
+        numerical_columns = list(df.select_dtypes(exclude=["object"]).columns)
+        categorical_columns = list(
+            df.select_dtypes(include=["object"]).columns)
+        to_scale = df[numerical_columns]
+        to_scale = to_scale.drop(["SK_ID_CURR"], axis=1)
+        scaled = scaler.transform(to_scale)
+        scaled_df = pd.DataFrame(scaled, columns=to_scale.columns)
+        df = pd.concat([unique_identifier_column, df[categorical_columns],
+                        scaled_df], axis=1)
+
+        # encode categorical columns
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} encoding "
+            f"categorical features")
+        df = encode_categorical_columns(
+            df,
+            preprocessing_configuration["dimension_for_hashing"],
+            preprocessing_configuration["train_hash_encoder"])
+
+    else:
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} please provide "
+            f"if the data passed is train data or test data")
     return df

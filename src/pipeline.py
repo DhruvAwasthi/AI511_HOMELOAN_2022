@@ -2,15 +2,17 @@
 Module contains tools to run build the entire pipeline of project
 """
 import logging
+import os
 from datetime import datetime
 from typing import NoReturn
 
+import pandas as pd
 from pandas.core.frame import DataFrame
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
-from src.helpers import load_dataset, pickle_dump_object
+from src.helpers import load_dataset, pickle_dump_object, pickle_load_object
 from src.preprocess import preprocess_data
 
 logger = logging.getLogger(__name__)
@@ -141,6 +143,41 @@ class Pipeline:
             self,
             test_df: DataFrame,
     ):
+        # preprocess the dataset
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"preprocessing test data")
+        preprocessed_df = preprocess_data(test_df,
+                                          self.preprocessing_configuration,
+                                          is_test_data=True
+                                          )
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"preprocessing done")
+
+        # load model
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"loading trained model")
+        clf = pickle_load_object("model.sav")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"successfully loaded trained model")
+
+        # make predictions
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"predicting on test data")
+        unique_identifier = preprocessed_df[["SK_ID_CURR"]]
+        preprocessed_df = preprocessed_df.drop(["SK_ID_CURR"], axis=1)
+        predictions = clf.predict(preprocessed_df.iloc[:, :-1].values)
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"predicting done on test data")
+
+        # save predictions
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"saving predictions")
+        submission_df = pd.DataFrame(columns=["SK_ID_CURR", "TARGET"])
+        submission_df["SK_ID_CURR"] = unique_identifier
+        submission_df["TARGET"] = predictions
+        submission_df.to_csv(os.path.join(self.config_info.DATASET_DIR, "submission.csv"), index=False)
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"successfully saved predictions")
         return
 
     def train_and_test_model(
@@ -215,7 +252,6 @@ class Pipeline:
             try:
                 self.test_model(test_df)
             except Exception as e:
-                print(f"failed to test model")
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to test model")
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "

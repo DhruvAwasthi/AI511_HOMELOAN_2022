@@ -182,7 +182,7 @@ def pickle_load_object(
             The loaded Python object structure.
     """
     try:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading"
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading "
                     f"pickle dump file {file_name}")
         file_path = os.path.join(DUMP_DIR, file_name)
         dump_file = open(file_path, "rb")

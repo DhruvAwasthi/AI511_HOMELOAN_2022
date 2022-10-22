@@ -6,9 +6,11 @@ from datetime import datetime
 from typing import NoReturn
 
 from pandas.core.frame import DataFrame
-from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
-from src.helpers import load_dataset
+from src.helpers import load_dataset, pickle_dump_object
 from src.preprocess import preprocess_data
 
 logger = logging.getLogger(__name__)
@@ -20,7 +22,36 @@ class Pipeline:
         self.preprocessing_configuration = config_info.preprocess_configuration
         self.model_configuration = config_info.model_configuration
 
-    def build_model(self):
+    def build_model(
+            self,
+    ) -> LogisticRegression:
+        """
+        Returns a logistic regression model
+        Returns:
+            LogisticRegression
+                A logistic regression model
+        """
+        clf = None
+        try:
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"building the logistic regression model")
+            clf = LogisticRegression(
+                random_state=self.model_configuration["random_state"],
+                max_iter=self.model_configuration["max_iter"],
+            )
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"successfully built logistic regression model")
+        except Exception as e:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
+                f"built logistic regression model")
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+                        f"caused - {str(e)}")
+        return clf
+
+    def scale_data(
+            self,
+    ):
         return
 
     def train_model(
@@ -42,23 +73,68 @@ class Pipeline:
 
         """
         # preprocess the dataset
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"preprocessing data")
         preprocessed_df = preprocess_data(train_df,
                                           self.preprocessing_configuration,
                                           is_train_data=True
                                           )
-
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"preprocessing done")
         # separate the predictors and the labels
         predictors = preprocessed_df.drop("TARGET", axis=1)
         labels = preprocessed_df["TARGET"].copy()
 
-        # split the data into train set and validation set
-        X_train, X_val, y_train, y_val = train_test_split(
-            predictors,
-            labels,
+        # build the model
+        clf = self.build_model()
+
+        stratified_splits = StratifiedShuffleSplit(
+            n_splits=self.config_info.model_configuration["num_stratified_shuffle_splits"],
             test_size=self.config_info.model_configuration["test_size"],
             random_state=self.config_info.model_configuration["random_state"],
         )
 
+
+        # split the data using stratified fold for training
+        iter = 0
+        for train_indices, val_indices in stratified_splits.split(predictors, labels):
+            iter += 1
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
+                f"model - iteration {iter}")
+            X_train, X_val = predictors.loc[train_indices], predictors.loc[val_indices]
+            y_train, y_val = labels.loc[train_indices], labels.loc[val_indices]
+            clf.fit(X_train.iloc[:, :-1].values, y_train.values)
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} complete "
+                f"training model - iteration {iter}")
+            y_predict = clf.predict(X_val.iloc[:, :-1].values)
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} calculating "
+                f"classification scores")
+            accuracy = accuracy_score(y_val.values, y_predict)
+            f1 = f1_score(y_val.values, y_predict)
+            f1_macro = f1_score(y_val.values, y_predict, average="macro")
+            precision = precision_score(y_val.values, y_predict)
+            recall = recall_score(y_val.values, y_predict)
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"accuracy score is: {accuracy}")
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"f1 score score is: {f1}")
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"f1 score (macro) score is: {f1_macro}")
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"precision score is: {precision}")
+            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                        f"recall score is: {recall}")
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training done")
+
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} saving model")
+        pickle_dump_object(clf, "model.sav")
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} model saved")
         return
 
     def test_model(

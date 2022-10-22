@@ -4,10 +4,13 @@ Module contains tools for preprocessing of data
 import logging
 from datetime import datetime
 
+import pandas as pd
 from pandas.core.frame import DataFrame
+from sklearn.preprocessing import MinMaxScaler
 
 from src.helpers import calculate_iqr_range, feature_hashing_encoder, \
-    pickle_dump_object, transform_data_using_hashing_encoder
+    pickle_dump_object, transform_data_using_hashing_encoder, \
+    pickle_load_object
 
 logger = logging.getLogger(__name__)
 
@@ -169,6 +172,7 @@ def drop_unnecessary_columns(
 def encode_categorical_columns(
         df: DataFrame,
         dimensions_for_hashing: int,
+        train_hash_encoder: bool = False,
 ) -> DataFrame:
     """
     Encode categorical columns for building the model.
@@ -176,6 +180,11 @@ def encode_categorical_columns(
     Args:
         df: DataFrame
             Pandas DataFrame in which categorical columns needs to be encoded.
+        dimensions_for_hashing: int
+            Dimensions to use for encoding the features.
+        train_hash_encoder: bool
+            Set this to True to train the hash encoder.
+            Set this to False to use the existing hash encoder.
 
     Returns:
         DataFrame:
@@ -202,13 +211,18 @@ def encode_categorical_columns(
         "EMERGENCYSTATE_MODE",
     ]
 
-    # train hashing encoder
-    hashing_encoder = feature_hashing_encoder(
-                            df,
-                            columns=columns_using_hashing_encoder,
-                            dimensions_to_use=dimensions_for_hashing)
-    # save hashing encoder for test data
-    pickle_dump_object(hashing_encoder, "hashing_encoder.pkl")
+    if train_hash_encoder:
+        # train hash encoder
+        hashing_encoder = feature_hashing_encoder(
+                                df,
+                                columns=columns_using_hashing_encoder,
+                                dimensions_to_use=dimensions_for_hashing)
+        # save hash encoder
+        pickle_dump_object(hashing_encoder, "hashing_encoder.pkl")
+    else:
+        # load hash encoder
+        hashing_encoder = pickle_load_object("hashing_encoder.pkl")
+
     # transform data using hashing encoder
     df = transform_data_using_hashing_encoder(df, hashing_encoder)
     return df
@@ -434,6 +448,8 @@ def handle_outliers(
             Pandas DataFrame with outliers handled.
     """
     for column in list(df.select_dtypes(exclude=["object"]).columns):
+        if column == "TARGET":
+            continue
         try:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling "
@@ -456,6 +472,37 @@ def handle_outliers(
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused -"
                 f"{str(e)}")
+    return df
+
+
+def scale_numeric_features(
+    df: DataFrame,
+) -> DataFrame:
+    """
+    Scales the numeric features using min-max normalization.
+    Args:
+        df: DataFrame
+            Pandas DataFrame containing the dataset.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrame with scaled numeric features.
+    """
+    numerical_columns = list(df.select_dtypes(exclude=["object"]).columns)
+    categorical_columns = list(df.select_dtypes(include=["object"]).columns)
+    target_column = df[["TARGET"]]
+    to_scale = df[numerical_columns]
+    to_scale = to_scale.drop(["TARGET"], axis=1)
+
+    # create and save scaler
+    scaler = MinMaxScaler()
+    scaler.fit(to_scale)
+    pickle_dump_object(scaler, "scaler.pkl")
+
+    # tranform data
+    scaled = scaler.transform(to_scale)
+    scaled_df = pd.DataFrame(scaled, columns=to_scale.columns)
+    df = pd.concat([df[categorical_columns], scaled_df, target_column], axis=1)
     return df
 
 
@@ -508,8 +555,14 @@ def preprocess_data(
         # deal with missing values for numerical columns
         df = deal_missing_value_for_numerical_columns(df)
 
+        # scale numeric features
+        df = scale_numeric_features(df)
+
         # encode categorical columns
-        df = encode_categorical_columns(df, preprocessing_configuration["dimension_for_hashing"])
+        df = encode_categorical_columns(
+            df,
+            preprocessing_configuration["dimension_for_hashing"],
+            preprocessing_configuration["train_hash_encoder"])
 
     elif is_test_data:
         pass

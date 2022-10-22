@@ -3,13 +3,16 @@ Module contains helper functions for the development of project
 """
 import logging
 import os
+import pickle as pkl
 from datetime import datetime
-from typing import NoReturn, Union
+from typing import Any, NoReturn, Union
 
 import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
 from pandas.core.series import Series
+
+from config import DUMP_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -32,21 +35,66 @@ def load_dataset(
     return df
 
 
-def create_log_dir(
+def create_dirs(
     log_dir_path: str,
+    dump_dir_path: str,
+    figures_dir_path: str,
 ) -> NoReturn:
     """
-    Creates log directory to store logs.
-    If the log directory already exists, then does nothing.
+    Creates log directory and dump directory to store logs.
+    If the directories already exists, then skip.
 
     Args:
         log_dir_path: str
-            Path of the log directory that needs to be creates.
+            Path of the log directory that will store all the logs.
+        dump_dir_path: str
+            Path of the dump directory that will store all the dumps.
+        figures_dir_path: str
+            Path of the figures directory that will store all the figures and
+            plots.
 
     Returns:
     """
+    # create log directory
     if not os.path.exists(log_dir_path):
+        print(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {log_dir_path} "
+                    f"does not exist, so creating one")
         os.makedirs(log_dir_path)
+        print(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"successfully created {log_dir_path}")
+    else:
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {log_dir_path} "
+            f"already exists")
+
+    # create dump directory
+    if not os.path.exists(dump_dir_path):
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {dump_dir_path} "
+            f"does not exist, so creating one")
+        os.makedirs(dump_dir_path)
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+            f"created {dump_dir_path}")
+    else:
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {dump_dir_path} "
+            f"already exists")
+
+    # create figures directory
+    if not os.path.exists(figures_dir_path):
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {figures_dir_path} "
+            f"does not exist, so creating one")
+        os.makedirs(figures_dir_path)
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+            f"created {figures_dir_path}")
+    else:
+        print(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} {figures_dir_path} "
+            f"already exists")
+
     return
 
 
@@ -83,3 +131,70 @@ def calculate_iqr_range(
     lower_bound = p1 - (scaled_factor * iqr_range)
     upper_bound = p3 + (scaled_factor * iqr_range)
     return iqr_range, lower_bound, upper_bound
+
+
+def pickle_dump_object(
+    object_to_dump: Any,
+    file_name: str,
+) -> NoReturn:
+    """
+    Saves the python object to disk for later use. Any Python object can be
+    dumped to save.
+    Args:
+        object_to_dump: Any
+            Any python object that needs to be saved. It will be saved as a
+            pickle dump file.
+        file_name: str
+            File name of the dump file where given python object will be saved.
+
+    Returns:
+    """
+    try:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} creating "
+                    f"pickle dump file {file_name}")
+        file_path = os.path.join(DUMP_DIR, file_name)
+        dump_file = open(file_path, "wb")
+        pkl.dump(object_to_dump, dump_file)
+        dump_file.close()
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+                    f"created pickle dump file {file_name}")
+    except Exception as e:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to  "
+                    f"create pickle dump file {str(e)}")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+                    f"caused - {str(e)}")
+    return
+
+
+def pickle_load_object(
+    file_name: str
+) -> Any:
+    """
+    Loads a saved pickle dump file of a Python object.
+
+    Args:
+        file_name: str
+            File name of the dump file from where to load the Python object.
+
+    Returns:
+        Any:
+            The loaded Python object structure.
+    """
+    try:
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} loading"
+                    f"pickle dump file {file_name}")
+        file_path = os.path.join(DUMP_DIR, file_name)
+        dump_file = open(file_path, "rb")
+        loaded_object = pkl.load(dump_file)
+        dump_file.close()
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
+            f"loaded pickle dump file {file_name}")
+    except Exception as e:
+        logger.info(
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to  "
+            f"load pickle dump file {str(e)}")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+                    f"caused - {str(e)}")
+        return None
+    return loaded_object

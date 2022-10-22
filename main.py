@@ -8,10 +8,10 @@ from datetime import datetime
 
 import config
 from src.pipeline import Pipeline
-from src.helpers import create_log_dir
+from src.helpers import create_dirs
 
-# create log directory
-create_log_dir(config.LOG_DIR)
+# create directory structure
+create_dirs(config.LOG_DIR, config.DUMP_DIR, config.FIGURES_DIR)
 
 # build command line interface for easy usage
 parser = argparse.ArgumentParser(

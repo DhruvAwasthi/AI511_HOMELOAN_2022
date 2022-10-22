@@ -6,10 +6,13 @@ import os
 # set directory paths
 DATA_DIR = "data/"
 LOG_DIR = "log/"
+DATASET_DIR = os.path.join(DATA_DIR, "dataset")
+DUMP_DIR = os.path.join(DATA_DIR, "dumps")
+FIGURES_DIR = os.path.join(DATA_DIR, "figures")
 
 paths = dict()
-paths["train_data_path"] = os.path.join(DATA_DIR, "train_data.csv")
-paths["test_data_path"] = os.path.join(DATA_DIR, "test_data.csv")
+paths["train_data_path"] = os.path.join(DATASET_DIR, "train_data.csv")
+paths["test_data_path"] = os.path.join(DATASET_DIR, "test_data.csv")
 
 # set configuration for preprocessing
 preprocess_configuration = dict()

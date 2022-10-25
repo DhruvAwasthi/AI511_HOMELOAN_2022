@@ -40,6 +40,10 @@ class Pipeline:
             clf = LogisticRegression(
                 random_state=self.model_configuration["random_state"],
                 max_iter=self.model_configuration["max_iter"],
+                # solver="saga",
+                # penalty="elasticnet",
+                # l1_ratio=0.5,
+                n_jobs=-1,
             )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")
@@ -184,7 +188,20 @@ class Pipeline:
             self,
             train_df: DataFrame,
             test_df: DataFrame,
-    ):
+    ) -> NoReturn:
+        """
+        Trains and test the model at once.
+
+        Args:
+            train_df: DataFrame:
+                Pandas dataframe containing the train data.
+            test_df:
+                Pandas dataframe containing the test data.
+
+        Returns:
+        """
+        self.train_model(train_df)
+        self.test_model(test_df)
         return
 
     def run(

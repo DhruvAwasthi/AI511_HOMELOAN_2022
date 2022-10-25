@@ -1,0 +1,274 @@
+INFO:src.pipeline:2022-10-25_19-45-39 loading train dataset...
+INFO:src.pipeline:2022-10-25_19-45-42 train dataset loaded successfully
+INFO:src.pipeline:2022-10-25_19-45-42 loading test dataset...
+INFO:src.pipeline:2022-10-25_19-45-44 test dataset loaded successfully
+INFO:src.pipeline:2022-10-25_19-45-44 preprocessing data
+INFO:src.preprocess:2022-10-25_19-45-46 no duplicate rows found
+INFO:src.helpers:2022-10-25_19-45-48 creating pickle dump file columns_with_std_lt_std_value.pkl
+INFO:src.helpers:2022-10-25_19-45-48 successfully created pickle dump file columns_with_std_lt_std_value.pkl
+INFO:src.preprocess:2022-10-25_19-45-48 9 column(s) have standard deviation value less than 0.02. Hence, dropping the columns: REGION_POPULATION_RELATIVE, FLAG_MOBIL, FLAG_DOCUMENT_2, FLAG_DOCUMENT_4, FLAG_DOCUMENT_7, FLAG_DOCUMENT_10, FLAG_DOCUMENT_12, FLAG_DOCUMENT_17, FLAG_DOCUMENT_21
+INFO:src.preprocess:2022-10-25_19-45-48 successfully dropped columns with low standard deviation value
+INFO:src.helpers:2022-10-25_19-45-48 creating pickle dump file unnecessary_columns.pkl
+INFO:src.helpers:2022-10-25_19-45-48 successfully created pickle dump file unnecessary_columns.pkl
+INFO:src.preprocess:2022-10-25_19-45-48 dropping 1 unnecessary columns: SK_ID_CURR
+INFO:src.preprocess:2022-10-25_19-45-49 successfully dropped unnecessary columns
+INFO:src.helpers:2022-10-25_19-45-49 creating pickle dump file handle_outlier.pkl
+INFO:src.helpers:2022-10-25_19-45-49 successfully created pickle dump file handle_outlier.pkl
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column CNT_CHILDREN
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column AMT_INCOME_TOTAL
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column AMT_CREDIT
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column AMT_ANNUITY
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column AMT_GOODS_PRICE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column DAYS_BIRTH
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column DAYS_EMPLOYED
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column DAYS_REGISTRATION
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column DAYS_ID_PUBLISH
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column OWN_CAR_AGE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLAG_EMP_PHONE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLAG_WORK_PHONE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLAG_CONT_MOBILE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLAG_PHONE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLAG_EMAIL
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column CNT_FAM_MEMBERS
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REGION_RATING_CLIENT
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REGION_RATING_CLIENT_W_CITY
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column HOUR_APPR_PROCESS_START
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REG_REGION_NOT_LIVE_REGION
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REG_REGION_NOT_WORK_REGION
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVE_REGION_NOT_WORK_REGION
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REG_CITY_NOT_LIVE_CITY
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column REG_CITY_NOT_WORK_CITY
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVE_CITY_NOT_WORK_CITY
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column EXT_SOURCE_1
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column EXT_SOURCE_2
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column EXT_SOURCE_3
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column APARTMENTS_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column BASEMENTAREA_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column YEARS_BEGINEXPLUATATION_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column YEARS_BUILD_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column COMMONAREA_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column ELEVATORS_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column ENTRANCES_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLOORSMAX_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLOORSMIN_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LANDAREA_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVINGAPARTMENTS_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVINGAREA_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column NONLIVINGAPARTMENTS_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column NONLIVINGAREA_AVG
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column APARTMENTS_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column BASEMENTAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column YEARS_BEGINEXPLUATATION_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column YEARS_BUILD_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column COMMONAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column ELEVATORS_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column ENTRANCES_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLOORSMAX_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column FLOORSMIN_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LANDAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVINGAPARTMENTS_MODE
+INFO:src.preprocess:2022-10-25_19-45-49 handling outliers for column LIVINGAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column NONLIVINGAPARTMENTS_MODE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column NONLIVINGAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column APARTMENTS_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column BASEMENTAREA_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column YEARS_BEGINEXPLUATATION_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column YEARS_BUILD_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column COMMONAREA_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column ELEVATORS_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column ENTRANCES_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLOORSMAX_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLOORSMIN_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column LANDAREA_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column LIVINGAPARTMENTS_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column LIVINGAREA_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column NONLIVINGAPARTMENTS_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column NONLIVINGAREA_MEDI
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column TOTALAREA_MODE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column OBS_30_CNT_SOCIAL_CIRCLE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column DEF_30_CNT_SOCIAL_CIRCLE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column OBS_60_CNT_SOCIAL_CIRCLE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column DEF_60_CNT_SOCIAL_CIRCLE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column DAYS_LAST_PHONE_CHANGE
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_3
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_5
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_6
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_8
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_9
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_11
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_13
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_14
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_15
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_16
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_18
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_19
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column FLAG_DOCUMENT_20
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_HOUR
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_DAY
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_WEEK
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_MON
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_QRT
+INFO:src.preprocess:2022-10-25_19-45-50 handling outliers for column AMT_REQ_CREDIT_BUREAU_YEAR
+INFO:src.preprocess:2022-10-25_19-45-50 creating missing values replacing criteria for categorical features
+INFO:src.preprocess:2022-10-25_19-45-50 there are  16 categorical features in dataset
+INFO:src.preprocess:2022-10-25_19-45-50 6 categorical column(s) contains missing values - NAME_TYPE_SUITE, OCCUPATION_TYPE, FONDKAPREMONT_MODE, HOUSETYPE_MODE, WALLSMATERIAL_MODE, EMERGENCYSTATE_MODE
+INFO:src.helpers:2022-10-25_19-45-50 creating pickle dump file replacing_criteria_for_cat_features.pkl
+INFO:src.helpers:2022-10-25_19-45-50 successfully created pickle dump file replacing_criteria_for_cat_features.pkl
+INFO:src.preprocess:2022-10-25_19-45-50 successfully created missing values replacing criteria for categorical features
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in NAME_TYPE_SUITE with Unaccompanied
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in OCCUPATION_TYPE with Missing
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in FONDKAPREMONT_MODE with Missing
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in HOUSETYPE_MODE with Missing
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in WALLSMATERIAL_MODE with Missing
+INFO:src.preprocess:2022-10-25_19-45-50 replacing missing values in EMERGENCYSTATE_MODE with Missing
+INFO:src.preprocess:2022-10-25_19-45-50 creating missing values replacing criteria for numerical features
+INFO:src.preprocess:2022-10-25_19-45-50 there are  96 categorical features in dataset
+INFO:src.preprocess:2022-10-25_19-45-51 61 categorical column(s) contains missing values - AMT_ANNUITY, AMT_GOODS_PRICE, OWN_CAR_AGE, CNT_FAM_MEMBERS, EXT_SOURCE_1, EXT_SOURCE_2, EXT_SOURCE_3, APARTMENTS_AVG, BASEMENTAREA_AVG, YEARS_BEGINEXPLUATATION_AVG, YEARS_BUILD_AVG, COMMONAREA_AVG, ELEVATORS_AVG, ENTRANCES_AVG, FLOORSMAX_AVG, FLOORSMIN_AVG, LANDAREA_AVG, LIVINGAPARTMENTS_AVG, LIVINGAREA_AVG, NONLIVINGAPARTMENTS_AVG, NONLIVINGAREA_AVG, APARTMENTS_MODE, BASEMENTAREA_MODE, YEARS_BEGINEXPLUATATION_MODE, YEARS_BUILD_MODE, COMMONAREA_MODE, ELEVATORS_MODE, ENTRANCES_MODE, FLOORSMAX_MODE, FLOORSMIN_MODE, LANDAREA_MODE, LIVINGAPARTMENTS_MODE, LIVINGAREA_MODE, NONLIVINGAPARTMENTS_MODE, NONLIVINGAREA_MODE, APARTMENTS_MEDI, BASEMENTAREA_MEDI, YEARS_BEGINEXPLUATATION_MEDI, YEARS_BUILD_MEDI, COMMONAREA_MEDI, ELEVATORS_MEDI, ENTRANCES_MEDI, FLOORSMAX_MEDI, FLOORSMIN_MEDI, LANDAREA_MEDI, LIVINGAPARTMENTS_MEDI, LIVINGAREA_MEDI, NONLIVINGAPARTMENTS_MEDI, NONLIVINGAREA_MEDI, TOTALAREA_MODE, OBS_30_CNT_SOCIAL_CIRCLE, DEF_30_CNT_SOCIAL_CIRCLE, OBS_60_CNT_SOCIAL_CIRCLE, DEF_60_CNT_SOCIAL_CIRCLE, DAYS_LAST_PHONE_CHANGE, AMT_REQ_CREDIT_BUREAU_HOUR, AMT_REQ_CREDIT_BUREAU_DAY, AMT_REQ_CREDIT_BUREAU_WEEK, AMT_REQ_CREDIT_BUREAU_MON, AMT_REQ_CREDIT_BUREAU_QRT, AMT_REQ_CREDIT_BUREAU_YEAR
+INFO:src.helpers:2022-10-25_19-45-51 creating pickle dump file replacing_criteria_for_num_features.pkl
+INFO:src.helpers:2022-10-25_19-45-51 successfully created pickle dump file replacing_criteria_for_num_features.pkl
+INFO:src.preprocess:2022-10-25_19-45-51 successfully created missing values replacing criteria for numerical features
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_ANNUITY with 24939.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_GOODS_PRICE with 450000.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in OWN_CAR_AGE with 9.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in CNT_FAM_MEMBERS with 2.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in EXT_SOURCE_1 with 0.506691720318096
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in EXT_SOURCE_2 with 0.5659990279431356
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in EXT_SOURCE_3 with 0.5352762504724826
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in APARTMENTS_AVG with 0.0876
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in BASEMENTAREA_AVG with 0.0761
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BEGINEXPLUATATION_AVG with 0.9816
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BUILD_AVG with 0.7552
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in COMMONAREA_AVG with 0.0212
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ELEVATORS_AVG with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ENTRANCES_AVG with 0.1379
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMAX_AVG with 0.1667
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMIN_AVG with 0.2083
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LANDAREA_AVG with 0.0483
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAPARTMENTS_AVG with 0.0756
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAREA_AVG with 0.0742
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAPARTMENTS_AVG with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAREA_AVG with 0.0035
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in APARTMENTS_MODE with 0.084
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in BASEMENTAREA_MODE with 0.0744
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BEGINEXPLUATATION_MODE with 0.9816
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BUILD_MODE with 0.7648
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in COMMONAREA_MODE with 0.0191
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ELEVATORS_MODE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ENTRANCES_MODE with 0.1379
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMAX_MODE with 0.1667
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMIN_MODE with 0.2083
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LANDAREA_MODE with 0.0461
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAPARTMENTS_MODE with 0.0762
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAREA_MODE with 0.073
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAPARTMENTS_MODE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAREA_MODE with 0.001
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in APARTMENTS_MEDI with 0.0869
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in BASEMENTAREA_MEDI with 0.0756
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BEGINEXPLUATATION_MEDI with 0.9816
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in YEARS_BUILD_MEDI with 0.7585
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in COMMONAREA_MEDI with 0.0209
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ELEVATORS_MEDI with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in ENTRANCES_MEDI with 0.1379
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMAX_MEDI with 0.1667
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in FLOORSMIN_MEDI with 0.2083
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LANDAREA_MEDI with 0.0488
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAPARTMENTS_MEDI with 0.0761
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in LIVINGAREA_MEDI with 0.0746
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAPARTMENTS_MEDI with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in NONLIVINGAREA_MEDI with 0.003
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in TOTALAREA_MODE with 0.0687
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in OBS_30_CNT_SOCIAL_CIRCLE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in DEF_30_CNT_SOCIAL_CIRCLE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in OBS_60_CNT_SOCIAL_CIRCLE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in DEF_60_CNT_SOCIAL_CIRCLE with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in DAYS_LAST_PHONE_CHANGE with -756.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_HOUR with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_DAY with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_WEEK with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_MON with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_QRT with 0.0
+INFO:src.preprocess:2022-10-25_19-45-51 replacing missing values in AMT_REQ_CREDIT_BUREAU_YEAR with 1.0
+INFO:src.helpers:2022-10-25_19-45-51 creating pickle dump file scaler.pkl
+INFO:src.helpers:2022-10-25_19-45-51 successfully created pickle dump file scaler.pkl
+INFO:src.helpers:2022-10-25_19-45-52 loading pickle dump file hashing_encoder.pkl
+INFO:src.helpers:2022-10-25_19-45-52 successfully loaded pickle dump file hashing_encoder.pkl
+INFO:src.helpers:2022-10-25_19-45-52 encoding categorical data using hashing encoder
+INFO:src.helpers:2022-10-25_19-46-34 successfully encoded categorical data using hashing encoder
+INFO:src.pipeline:2022-10-25_19-46-34 preprocessing done
+INFO:src.pipeline:2022-10-25_19-46-34 building the logistic regression model
+INFO:src.pipeline:2022-10-25_19-46-34 successfully built logistic regression model
+INFO:src.pipeline:2022-10-25_19-46-34 training model - iteration 1
+INFO:src.pipeline:2022-10-25_19-46-53 complete training model - iteration 1
+INFO:src.pipeline:2022-10-25_19-46-53 calculating classification scores
+INFO:src.pipeline:2022-10-25_19-46-53 accuracy score is: 0.9191362976131117
+INFO:src.pipeline:2022-10-25_19-46-53 f1 score score is: 0.015311510031678986
+INFO:src.pipeline:2022-10-25_19-46-53 f1 score (macro) score is: 0.48657420956334924
+INFO:src.pipeline:2022-10-25_19-46-53 precision score is: 0.453125
+INFO:src.pipeline:2022-10-25_19-46-53 recall score is: 0.007787325456498389
+INFO:src.pipeline:2022-10-25_19-46-53 training model - iteration 2
+INFO:src.pipeline:2022-10-25_19-47-12 complete training model - iteration 2
+INFO:src.pipeline:2022-10-25_19-47-12 calculating classification scores
+INFO:src.pipeline:2022-10-25_19-47-12 accuracy score is: 0.9192663732737876
+INFO:src.pipeline:2022-10-25_19-47-12 f1 score score is: 0.015335801163405605
+INFO:src.pipeline:2022-10-25_19-47-12 f1 score (macro) score is: 0.4866216938722354
+INFO:src.pipeline:2022-10-25_19-47-12 precision score is: 0.5
+INFO:src.pipeline:2022-10-25_19-47-12 recall score is: 0.007787325456498389
+INFO:src.pipeline:2022-10-25_19-47-12 training model - iteration 3
+INFO:src.pipeline:2022-10-25_19-47-31 complete training model - iteration 3
+INFO:src.pipeline:2022-10-25_19-47-31 calculating classification scores
+INFO:src.pipeline:2022-10-25_19-47-32 accuracy score is: 0.9197433173629328
+INFO:src.pipeline:2022-10-25_19-47-32 f1 score score is: 0.027325275880189175
+INFO:src.pipeline:2022-10-25_19-47-32 f1 score (macro) score is: 0.4927350872888645
+INFO:src.pipeline:2022-10-25_19-47-32 precision score is: 0.6341463414634146
+INFO:src.pipeline:2022-10-25_19-47-32 recall score is: 0.013963480128893663
+INFO:src.pipeline:2022-10-25_19-47-32 training model - iteration 4
+INFO:src.pipeline:2022-10-25_19-47-46 complete training model - iteration 4
+INFO:src.pipeline:2022-10-25_19-47-47 calculating classification scores
+INFO:src.pipeline:2022-10-25_19-47-47 accuracy score is: 0.9191796561666703
+INFO:src.pipeline:2022-10-25_19-47-47 f1 score score is: 0.016877637130801686
+INFO:src.pipeline:2022-10-25_19-47-47 f1 score (macro) score is: 0.48736762415424123
+INFO:src.pipeline:2022-10-25_19-47-47 precision score is: 0.47058823529411764
+INFO:src.pipeline:2022-10-25_19-47-47 recall score is: 0.008592910848549946
+INFO:src.pipeline:2022-10-25_19-47-47 training model - iteration 5
+INFO:src.pipeline:2022-10-25_19-48-10 complete training model - iteration 5
+INFO:src.pipeline:2022-10-25_19-48-10 calculating classification scores
+INFO:src.pipeline:2022-10-25_19-48-10 accuracy score is: 0.9191796561666703
+INFO:src.pipeline:2022-10-25_19-48-10 f1 score score is: 0.018430753027909422
+INFO:src.pipeline:2022-10-25_19-48-10 f1 score (macro) score is: 0.4881427528366462
+INFO:src.pipeline:2022-10-25_19-48-10 precision score is: 0.47297297297297297
+INFO:src.pipeline:2022-10-25_19-48-10 recall score is: 0.009398496240601503
+INFO:src.pipeline:2022-10-25_19-48-10 training done
+INFO:src.pipeline:2022-10-25_19-48-10 saving model
+INFO:src.helpers:2022-10-25_19-48-10 creating pickle dump file model.sav
+INFO:src.helpers:2022-10-25_19-48-10 successfully created pickle dump file model.sav
+INFO:src.pipeline:2022-10-25_19-48-10 model saved
+INFO:src.pipeline:2022-10-25_19-48-10 preprocessing test data
+INFO:src.preprocess:2022-10-25_19-48-10 dropping columns with lwo standard deviation value 
+INFO:src.helpers:2022-10-25_19-48-10 loading pickle dump file columns_with_std_lt_std_value.pkl
+INFO:src.helpers:2022-10-25_19-48-10 successfully loaded pickle dump file columns_with_std_lt_std_value.pkl
+INFO:src.preprocess:2022-10-25_19-48-10 dropping unnecessary columns
+INFO:src.helpers:2022-10-25_19-48-10 loading pickle dump file unnecessary_columns.pkl
+INFO:src.helpers:2022-10-25_19-48-10 successfully loaded pickle dump file unnecessary_columns.pkl
+INFO:src.preprocess:2022-10-25_19-48-10 handling missing values of categorical columns
+INFO:src.helpers:2022-10-25_19-48-10 loading pickle dump file replacing_criteria_for_cat_features.pkl
+INFO:src.helpers:2022-10-25_19-48-10 successfully loaded pickle dump file replacing_criteria_for_cat_features.pkl
+INFO:src.preprocess:2022-10-25_19-48-10 handling missing values of numerical columns
+INFO:src.helpers:2022-10-25_19-48-10 loading pickle dump file replacing_criteria_for_num_features.pkl
+INFO:src.helpers:2022-10-25_19-48-10 successfully loaded pickle dump file replacing_criteria_for_num_features.pkl
+INFO:src.preprocess:2022-10-25_19-48-10 scaling numeric features
+INFO:src.helpers:2022-10-25_19-48-10 loading pickle dump file scaler.pkl
+INFO:src.helpers:2022-10-25_19-48-10 successfully loaded pickle dump file scaler.pkl
+INFO:src.preprocess:2022-10-25_19-48-11 encoding categorical features
+INFO:src.helpers:2022-10-25_19-48-11 loading pickle dump file hashing_encoder.pkl
+INFO:src.helpers:2022-10-25_19-48-11 successfully loaded pickle dump file hashing_encoder.pkl
+INFO:src.helpers:2022-10-25_19-48-11 encoding categorical data using hashing encoder
+INFO:src.helpers:2022-10-25_19-48-45 successfully encoded categorical data using hashing encoder
+INFO:src.pipeline:2022-10-25_19-48-45 preprocessing done
+INFO:src.pipeline:2022-10-25_19-48-45 loading trained model
+INFO:src.helpers:2022-10-25_19-48-45 loading pickle dump file model.sav
+INFO:src.helpers:2022-10-25_19-48-45 successfully loaded pickle dump file model.sav
+INFO:src.pipeline:2022-10-25_19-48-45 successfully loaded trained model
+INFO:src.pipeline:2022-10-25_19-48-45 predicting on test data
+INFO:src.pipeline:2022-10-25_19-48-45 predicting done on test data
+INFO:src.pipeline:2022-10-25_19-48-45 saving predictions
+INFO:src.pipeline:2022-10-25_19-48-45 successfully saved predictions

@@ -120,34 +120,34 @@ def drop_unnecessary_columns(
     """
     unnecessary_columns = [
         "SK_ID_CURR",  # this is just a unique identifier for each row
-        "FLAG_EMP_PHONE",  # office phone number is not important
-        "FLAG_WORK_PHONE",  # home phone number is not important
-        "WEEKDAY_APPR_PROCESS_START",
-        # does not matter on what day the loan is applied for
-        "HOUR_APPR_PROCESS_START",
-        # does not matter during what hour the loan is applied for
-        "REG_REGION_NOT_LIVE_REGION",
-        # permanent address and contact address (region) are different addresses, and does not matter if they match or not
-        "REG_REGION_NOT_WORK_REGION",
-        # permanent address and work address (region) are different addresses, and does not matter if they match or not
-        "LIVE_REGION_NOT_WORK_REGION",
-        # contact address and work address (region) are different addresses, and does not matter if they match or not
-        "REG_CITY_NOT_LIVE_CITY",
-        # permanent address and contact address (region) are different addresses, and does not matter if they match or not
-        "REG_CITY_NOT_WORK_CITY",
-        # permanent address and work address (region) are different addresses, and does not matter if they match or not
-        "LIVE_CITY_NOT_WORK_CITY",
-        # contact address and work address (region) are different addresses, and does not matter if they match or not,
-        "DAYS_LAST_PHONE_CHANGE",
-        # phone change information does not reveal something important as one can change phone due to multiple things,
-        "OBS_30_CNT_SOCIAL_CIRCLE",
-        # surroundings is biased and does not reveal anything about the person's character
-        "DEF_30_CNT_SOCIAL_CIRCLE",
-        # surroundings is biased and does not reveal anything about the person's character
-        "OBS_60_CNT_SOCIAL_CIRCLE",
-        # surroundings is biased and does not reveal anything about the person's character
-        "DEF_60_CNT_SOCIAL_CIRCLE",
-        # surroundings is biased and does not reveal anything about the person's character
+        # "FLAG_EMP_PHONE",  # office phone number is not important
+        # "FLAG_WORK_PHONE",  # home phone number is not important
+        # "WEEKDAY_APPR_PROCESS_START",
+        # # does not matter on what day the loan is applied for
+        # "HOUR_APPR_PROCESS_START",
+        # # does not matter during what hour the loan is applied for
+        # "REG_REGION_NOT_LIVE_REGION",
+        # # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        # "REG_REGION_NOT_WORK_REGION",
+        # # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        # "LIVE_REGION_NOT_WORK_REGION",
+        # # contact address and work address (region) are different addresses, and does not matter if they match or not
+        # "REG_CITY_NOT_LIVE_CITY",
+        # # permanent address and contact address (region) are different addresses, and does not matter if they match or not
+        # "REG_CITY_NOT_WORK_CITY",
+        # # permanent address and work address (region) are different addresses, and does not matter if they match or not
+        # "LIVE_CITY_NOT_WORK_CITY",
+        # # contact address and work address (region) are different addresses, and does not matter if they match or not,
+        # "DAYS_LAST_PHONE_CHANGE",
+        # # phone change information does not reveal something important as one can change phone due to multiple things,
+        # "OBS_30_CNT_SOCIAL_CIRCLE",
+        # # surroundings is biased and does not reveal anything about the person's character
+        # "DEF_30_CNT_SOCIAL_CIRCLE",
+        # # surroundings is biased and does not reveal anything about the person's character
+        # "OBS_60_CNT_SOCIAL_CIRCLE",
+        # # surroundings is biased and does not reveal anything about the person's character
+        # "DEF_60_CNT_SOCIAL_CIRCLE",
+        # # surroundings is biased and does not reveal anything about the person's character
     ]
 
     pickle_dump_object(unnecessary_columns, "unnecessary_columns.pkl")
@@ -209,6 +209,7 @@ def encode_categorical_columns(
         "HOUSETYPE_MODE",
         "WALLSMATERIAL_MODE",
         "EMERGENCYSTATE_MODE",
+        "WEEKDAY_APPR_PROCESS_START",
     ]
 
     if train_hash_encoder:
@@ -429,9 +430,60 @@ def deal_missing_value_for_numerical_columns(
     return df
 
 
+def get_handle_outlier_criteria(
+    df: DataFrame,
+    outliers_handling_configuration: dict,
+    is_train_data: bool = True,
+) -> dict:
+    """
+    Returns the handling criteria for outliers in all the columns.
+
+    Args:
+        df: DataFrame
+            Pandas dataframe containing the data.
+        outliers_handling_configuration: dict
+            It contains key-value pairs defining how to handle outliers, and
+            other important factors.
+        is_train_data: bool, defaults to True
+            Set this to True if the dataframe passed is train data.
+            Set this to False if the dataframe passed is test data.
+
+    Returns: dict
+        Dictionary containing the column name and list of iqr, lower bound, and
+        upper bound values necessary to detect outliers as key-value pairs
+        respectively.
+    """
+    handle_outlier_criteria = dict()
+    if is_train_data:
+        for column in list(df.select_dtypes(exclude=["object"]).columns):
+            if column == "TARGET":
+                continue
+            iqr_range, lower_bound, upper_bound = calculate_iqr_range(
+                df[column],
+                scaled_factor=outliers_handling_configuration["scaled_factor"],
+                percentile_range=outliers_handling_configuration[
+                    "percentile_range"],
+            )
+            handle_outlier_criteria[column] = [iqr_range, lower_bound,
+                                               upper_bound]
+        # save the criteria
+        pickle_dump_object(handle_outlier_criteria, "handle_outlier.pkl")
+
+    else:
+        # load outlier handling criteria
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"loading outlier handling criteria")
+        handle_outlier_criteria = pickle_load_object("handle_outlier.pkl")
+        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                    f"successfully loaded outlier handling criteria")
+
+    return handle_outlier_criteria
+
+
 def handle_outliers(
-        df: DataFrame,
-        outliers_handling_configuration: dict,
+    df: DataFrame,
+    outliers_handling_configuration: dict,
+    is_train_data: bool = True,
 ) -> DataFrame:
     """
     Deals with outliers present in the columns.
@@ -442,25 +494,30 @@ def handle_outliers(
         outliers_handling_configuration: dict
             It contains key-value pairs defining how to handle outliers, and
             other important factors.
+        is_train_data: bool, defaults to True
+            Set this to True if the dataframe passed is train data.
+            Set this to False if the dataframe passed is test data.
 
     Returns:
         DataFrame:
             Pandas DataFrame with outliers handled.
     """
+    handle_outlier_criteria = get_handle_outlier_criteria(
+        df,
+        outliers_handling_configuration,
+        is_train_data=is_train_data,
+    )
+
     for column in list(df.select_dtypes(exclude=["object"]).columns):
         if column == "TARGET":
+            continue
+        elif column == "SK_ID_CURR":
             continue
         try:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} handling "
-                f"outlier(s) for column {column}")
-            iqr_range, lower_bound, upper_bound = calculate_iqr_range(
-                df[column],
-                scaled_factor=outliers_handling_configuration["scaled_factor"],
-                percentile_range=outliers_handling_configuration[
-                    "percentile_range"],
-            )
-
+                f"outliers for column {column}")
+            iqr_range, lower_bound, upper_bound = handle_outlier_criteria[column]
             index_of_outliers = df[
                 (df[column] > upper_bound) | (df[column] < lower_bound)].index
             median_of_column = df[column].dropna().median()
@@ -547,7 +604,8 @@ def preprocess_data(
         df = drop_unnecessary_columns(df)
 
         # handle outliers
-        df = handle_outliers(df, preprocessing_configuration["outliers"])
+        df = handle_outliers(df, preprocessing_configuration["outliers"],
+                             is_train_data=True)
 
         # deal with missing values for categorical columns
         df = deal_missing_value_for_categorical_columns(df)
@@ -583,6 +641,11 @@ def preprocess_data(
         unnecessary_columns.remove("SK_ID_CURR")
         df = df.drop(unnecessary_columns, axis=1,
                      errors="ignore")
+
+        if preprocessing_configuration["outliers"]["at_test_time"]:
+            # handle outliers
+            df = handle_outliers(df, preprocessing_configuration["outliers"],
+                                 is_train_data=False)
 
         # deal with missing values for categorical columns
         logger.info(

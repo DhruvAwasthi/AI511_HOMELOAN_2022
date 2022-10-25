@@ -8,3 +8,6 @@ src/__pycache__/
 # ignore jupyter notebook checkpoints
 notebooks/.ipynb_checkpoints/
 
+# ignore git attributes
+.gitattributes/
+

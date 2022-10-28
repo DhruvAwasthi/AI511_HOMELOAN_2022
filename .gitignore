@@ -9,5 +9,5 @@ src/__pycache__/
 notebooks/.ipynb_checkpoints/
 
 # ignore git attributes
-.gitattributes/
+.gitattributes
 

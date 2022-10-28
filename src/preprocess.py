@@ -3,10 +3,12 @@ Module contains tools for preprocessing of data
 """
 import logging
 from datetime import datetime
+from typing import Any
 
 import pandas as pd
 from pandas.core.frame import DataFrame
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.compose import make_column_transformer
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
 from src.helpers import calculate_iqr_range, feature_hashing_encoder, \
     pickle_dump_object, transform_data_using_hashing_encoder, \
@@ -171,24 +173,24 @@ def drop_unnecessary_columns(
 
 def encode_categorical_columns(
         df: DataFrame,
-        dimensions_for_hashing: int,
-        train_hash_encoder: bool = False,
-) -> DataFrame:
+        train_one_hot_encoder: bool = False,
+) -> tuple[Any, Any]:
     """
-    Encode categorical columns for building the model.
+    Encode categorical columns using one hot encoding.
 
     Args:
         df: DataFrame
             Pandas DataFrame in which categorical columns needs to be encoded.
-        dimensions_for_hashing: int
-            Dimensions to use for encoding the features.
-        train_hash_encoder: bool
-            Set this to True to train the hash encoder.
-            Set this to False to use the existing hash encoder.
+        train_one_hot_encoder: bool
+            Set this to True to train the one_hot encoder.
+            Set this to False to use the existing one_hot encoder.
 
     Returns:
-        DataFrame:
-            Pandas DataFrame after encoding all the categorical columns
+        tuple:
+            If data passed is train data, then it returns the transformed
+            predictors and labels.
+            If data passed is test data, then it returns the transformed
+            predictors.
     """
     # encode columns with two unique values
     df["NAME_CONTRACT_TYPE"].replace({"Cash loans": 1, "Revolving loans": 0}, inplace=True)
@@ -196,7 +198,7 @@ def encode_categorical_columns(
     df["FLAG_OWN_REALTY"].replace({"Y": 1, "N": 0}, inplace=True)
 
     # columns to encode using hashing encoder
-    columns_using_hashing_encoder = [
+    columns_using_one_hot_encoder = [
         "OCCUPATION_TYPE",
         "ORGANIZATION_TYPE",
         "CODE_GENDER",
@@ -212,21 +214,24 @@ def encode_categorical_columns(
         "WEEKDAY_APPR_PROCESS_START",
     ]
 
-    if train_hash_encoder:
-        # train hash encoder
-        hashing_encoder = feature_hashing_encoder(
-                                df,
-                                columns=columns_using_hashing_encoder,
-                                dimensions_to_use=dimensions_for_hashing)
-        # save hash encoder
-        pickle_dump_object(hashing_encoder, "hashing_encoder.pkl")
-    else:
-        # load hash encoder
-        hashing_encoder = pickle_load_object("hashing_encoder.pkl")
+    if train_one_hot_encoder:
+        predictors = df.iloc[:, :-1]
+        labels = df.iloc[:, -1]
+        # train one hot encoder
+        transformer = make_column_transformer(
+                        (OneHotEncoder(), columns_using_one_hot_encoder),
+                        remainder='passthrough')
+        predictors_transformed = transformer.fit_transform(predictors)
 
-    # transform data using hashing encoder
-    df = transform_data_using_hashing_encoder(df, hashing_encoder)
-    return df
+        # save one hot encoder
+        pickle_dump_object(transformer, "cat_encoder.pkl")
+        return predictors_transformed, labels
+    else:
+        # load one hot encoder
+        transformer = pickle_load_object("cat_encoder.pkl")
+        predictors = df.iloc[:, :]
+        predictors_transformed = transformer.transform(predictors)
+        return predictors_transformed, "_"
 
 
 def get_replacing_criteria_for_categorical_features(
@@ -568,7 +573,7 @@ def preprocess_data(
         preprocessing_configuration: dict,
         is_train_data: bool = False,
         is_test_data: bool = False,
-) -> DataFrame:
+) -> tuple[Any, Any]:
     """
     Do all the preprocessing of data before feeding it to the learning
     algorithms. It can preprocess both - the training data, and the test data.
@@ -587,9 +592,11 @@ def preprocess_data(
             data.
 
     Returns:
-        DataFrame:
-            Pandas dataframe containing the dataset after doing all the
-            preprocessing steps.
+        tuple:
+            If data passed is train data, then it returns the transformed
+            predictors and labels.
+            If data passed is test data, then it returns the transformed
+            predictors.
     """
     if is_train_data:
         # remove duplicate rows
@@ -617,10 +624,10 @@ def preprocess_data(
         df = scale_numeric_features(df)
 
         # encode categorical columns
-        df = encode_categorical_columns(
+        predictors, labels = encode_categorical_columns(
             df,
-            preprocessing_configuration["dimension_for_hashing"],
-            preprocessing_configuration["train_hash_encoder"])
+            True)
+        return predictors, labels
 
     elif is_test_data:
 
@@ -685,13 +692,7 @@ def preprocess_data(
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} encoding "
             f"categorical features")
-        df = encode_categorical_columns(
+        predictors, labels = encode_categorical_columns(
             df,
-            preprocessing_configuration["dimension_for_hashing"],
-            preprocessing_configuration["train_hash_encoder"])
-
-    else:
-        logger.info(
-            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} please provide "
-            f"if the data passed is train data or test data")
-    return df
+            False)
+        return predictors, labels

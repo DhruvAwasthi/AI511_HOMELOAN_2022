@@ -9,7 +9,8 @@ from typing import NoReturn
 import pandas as pd
 from pandas.core.frame import DataFrame
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, \
+    f1_score
 from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
 from src.helpers import load_dataset, pickle_dump_object, pickle_load_object
@@ -36,7 +37,7 @@ class Pipeline:
         clf = None
         try:
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                    f"building the logistic regression model")
+                        f"building the logistic regression model")
             clf = LogisticRegression(
                 random_state=self.model_configuration["random_state"],
                 max_iter=self.model_configuration["max_iter"],
@@ -81,48 +82,46 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing data")
-        preprocessed_df = preprocess_data(train_df,
-                                          self.preprocessing_configuration,
-                                          is_train_data=True
-                                          )
+        predictors, labels = preprocess_data(train_df,
+                                             self.preprocessing_configuration,
+                                             is_train_data=True
+                                             )
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
-        # separate the predictors and the labels
-        predictors = preprocessed_df.drop("TARGET", axis=1)
-        labels = preprocessed_df["TARGET"].copy()
 
         # build the model
         clf = self.build_model()
 
         stratified_splits = StratifiedShuffleSplit(
-            n_splits=self.config_info.model_configuration["num_stratified_shuffle_splits"],
+            n_splits=self.config_info.model_configuration[
+                "num_stratified_shuffle_splits"],
             test_size=self.config_info.model_configuration["test_size"],
             random_state=self.config_info.model_configuration["random_state"],
         )
 
-
         # split the data using stratified fold for training
         iter = 0
-        for train_indices, val_indices in stratified_splits.split(predictors, labels):
+        for train_indices, val_indices in stratified_splits.split(predictors,
+                                                                  labels):
             iter += 1
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
                 f"model - iteration {iter}")
-            X_train, X_val = predictors.loc[train_indices], predictors.loc[val_indices]
+            X_train, X_val = predictors[train_indices], predictors[val_indices]
             y_train, y_val = labels.loc[train_indices], labels.loc[val_indices]
-            clf.fit(X_train.iloc[:, :-1].values, y_train.values)
+            clf.fit(X_train, y_train)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} complete "
                 f"training model - iteration {iter}")
-            y_predict = clf.predict(X_val.iloc[:, :-1].values)
+            y_predict = clf.predict(X_val)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} calculating "
                 f"classification scores")
-            accuracy = accuracy_score(y_val.values, y_predict)
-            f1 = f1_score(y_val.values, y_predict)
-            f1_macro = f1_score(y_val.values, y_predict, average="macro")
-            precision = precision_score(y_val.values, y_predict)
-            recall = recall_score(y_val.values, y_predict)
+            accuracy = accuracy_score(y_val, y_predict)
+            f1 = f1_score(y_val, y_predict)
+            f1_macro = f1_score(y_val, y_predict, average="macro")
+            precision = precision_score(y_val, y_predict)
+            recall = recall_score(y_val, y_predict)
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"accuracy score is: {accuracy}")
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
@@ -150,10 +149,10 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing test data")
-        preprocessed_df = preprocess_data(test_df,
-                                          self.preprocessing_configuration,
-                                          is_test_data=True
-                                          )
+        predictors, _ = preprocess_data(test_df,
+                                        self.preprocessing_configuration,
+                                        is_test_data=True
+                                        )
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
 
@@ -167,9 +166,8 @@ class Pipeline:
         # make predictions
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting on test data")
-        unique_identifier = preprocessed_df[["SK_ID_CURR"]]
-        preprocessed_df = preprocessed_df.drop(["SK_ID_CURR"], axis=1)
-        predictions = clf.predict(preprocessed_df.iloc[:, :-1].values)
+        unique_identifier = test_df[["SK_ID_CURR"]]
+        predictions = clf.predict(predictors)
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting done on test data")
 
@@ -179,7 +177,9 @@ class Pipeline:
         submission_df = pd.DataFrame(columns=["SK_ID_CURR", "TARGET"])
         submission_df["SK_ID_CURR"] = unique_identifier
         submission_df["TARGET"] = predictions
-        submission_df.to_csv(os.path.join(self.config_info.DATASET_DIR, "submission.csv"), index=False)
+        submission_df.to_csv(
+            os.path.join(self.config_info.DATASET_DIR, "submission.csv"),
+            index=False)
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"successfully saved predictions")
         return

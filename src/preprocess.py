@@ -8,7 +8,7 @@ from typing import Any
 import pandas as pd
 from pandas.core.frame import DataFrame
 from sklearn.compose import make_column_transformer
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, StandardScaler
 
 from src.helpers import calculate_iqr_range, feature_hashing_encoder, \
     pickle_dump_object, transform_data_using_hashing_encoder, \
@@ -557,7 +557,8 @@ def scale_numeric_features(
     to_scale = to_scale.drop(["TARGET"], axis=1)
 
     # create and save scaler
-    scaler = MinMaxScaler()
+    # scaler = MinMaxScaler()
+    scaler = StandardScaler()
     scaler.fit(to_scale)
     pickle_dump_object(scaler, "scaler.pkl")
 

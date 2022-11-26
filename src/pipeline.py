@@ -41,9 +41,9 @@ class Pipeline:
             clf = LogisticRegression(
                 random_state=self.model_configuration["random_state"],
                 max_iter=self.model_configuration["max_iter"],
-                # solver="saga",
-                # penalty="elasticnet",
-                # l1_ratio=0.5,
+                solver="saga",
+                penalty="elasticnet",
+                l1_ratio=0.5,
                 n_jobs=-1,
             )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
@@ -117,21 +117,21 @@ class Pipeline:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} calculating "
                 f"classification scores")
-            accuracy = accuracy_score(y_val, y_predict)
-            f1 = f1_score(y_val, y_predict)
+            # accuracy = accuracy_score(y_val, y_predict)
+            # f1 = f1_score(y_val, y_predict)
             f1_macro = f1_score(y_val, y_predict, average="macro")
-            precision = precision_score(y_val, y_predict)
-            recall = recall_score(y_val, y_predict)
-            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                        f"accuracy score is: {accuracy}")
-            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                        f"f1 score score is: {f1}")
+            # precision = precision_score(y_val, y_predict)
+            # recall = recall_score(y_val, y_predict)
+            # logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+            #             f"accuracy score is: {accuracy}")
+            # logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+            #             f"f1 score score is: {f1}")
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"f1 score (macro) score is: {f1_macro}")
-            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                        f"precision score is: {precision}")
-            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
-                        f"recall score is: {recall}")
+            # logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+            #             f"precision score is: {precision}")
+            # logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+            #             f"recall score is: {recall}")
         logger.info(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training done")
 

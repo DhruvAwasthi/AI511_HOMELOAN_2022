@@ -525,8 +525,9 @@ def handle_outliers(
             iqr_range, lower_bound, upper_bound = handle_outlier_criteria[column]
             index_of_outliers = df[
                 (df[column] > upper_bound) | (df[column] < lower_bound)].index
-            median_of_column = df[column].dropna().median()
-            df.loc[index_of_outliers, column] = median_of_column
+            df = df.drop(index=index_of_outliers)
+            # median_of_column = df[column].dropna().median()
+            # df.loc[index_of_outliers, column] = median_of_column
         except Exception as e:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "

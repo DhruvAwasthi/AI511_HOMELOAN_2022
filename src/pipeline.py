@@ -9,6 +9,7 @@ from typing import NoReturn
 import pandas as pd
 from pandas.core.frame import DataFrame
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier, AdaBoostClassifier, RandomForestClassifier, VotingClassifier, StackingClassifier, HistGradientBoostingClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, \
     f1_score
 from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
@@ -38,13 +39,29 @@ class Pipeline:
         try:
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"building the logistic regression model")
-            clf = LogisticRegression(
+            # clf = LogisticRegression(
+            #     random_state=self.model_configuration["random_state"],
+            #     max_iter=self.model_configuration["max_iter"],
+            #     # solver="saga",
+            #     # penalty="elasticnet",
+            #     # l1_ratio=0.5,
+            #     n_jobs=-1,
+            # )
+            clf1 = HistGradientBoostingClassifier(
                 random_state=self.model_configuration["random_state"],
-                max_iter=self.model_configuration["max_iter"],
-                solver="saga",
-                penalty="elasticnet",
-                l1_ratio=0.5,
-                n_jobs=-1,
+                categorical_features=[1, 2, 3, 4, 10, 11, 12, 13, 14, 27, 31, 39, 85, 86, 88, 89]
+            )
+            clf2 = AdaBoostClassifier(
+               n_estimators=100,
+               random_state=self.model_configuration["random_state"],
+            )
+            clf3 = GradientBoostingClassifier(
+               n_estimators=100,
+               random_state=self.model_configuration["random_state"],
+            )
+            clf = StackingClassifier(
+                estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
+                final_estimator=LogisticRegression()
             )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")

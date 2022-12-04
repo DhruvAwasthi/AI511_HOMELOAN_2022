@@ -7,8 +7,7 @@ Babel==2.10.3
 backcall==0.2.0
 beautifulsoup4==4.11.1
 bleach==5.0.1
-category-encoders==2.5.1.post0
-certifi @ file:///croot/certifi_1665076670883/work/certifi
+category-encoders==2.5.1.post0q
 cffi==1.15.1
 charset-normalizer==2.1.1
 contourpy==1.0.5

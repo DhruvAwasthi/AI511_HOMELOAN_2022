@@ -61,7 +61,8 @@ class Pipeline:
             )
             clf = StackingClassifier(
                 estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
-                final_estimator=LogisticRegression()
+                final_estimator=LogisticRegression(),
+                n_jobs=-1,
             )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")

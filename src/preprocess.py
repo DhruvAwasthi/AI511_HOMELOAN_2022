@@ -174,7 +174,7 @@ def drop_unnecessary_columns(
 def encode_categorical_columns(
         df: DataFrame,
         train_one_hot_encoder: bool = False,
-) -> tuple[Any, Any]:
+):
     """
     Encode categorical columns using one hot encoding.
 
@@ -575,7 +575,7 @@ def preprocess_data(
         preprocessing_configuration: dict,
         is_train_data: bool = False,
         is_test_data: bool = False,
-) -> tuple[Any, Any]:
+):
     """
     Do all the preprocessing of data before feeding it to the learning
     algorithms. It can preprocess both - the training data, and the test data.

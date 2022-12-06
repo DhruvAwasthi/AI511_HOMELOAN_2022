@@ -12,7 +12,7 @@ from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, StandardScaler
 
 from src.helpers import calculate_iqr_range, feature_hashing_encoder, \
     pickle_dump_object, transform_data_using_hashing_encoder, \
-    pickle_load_object
+    pickle_load_object, get_datatype_mapping_for_reduction
 
 logger = logging.getLogger(__name__)
 
@@ -196,12 +196,13 @@ def encode_categorical_columns(
     df["NAME_CONTRACT_TYPE"].replace({"Cash loans": 1, "Revolving loans": 0}, inplace=True)
     df["FLAG_OWN_CAR"].replace({"Y": 1, "N": 0}, inplace=True)
     df["FLAG_OWN_REALTY"].replace({"Y": 1, "N": 0}, inplace=True)
+    df["FLAG_OWN_REALTY"].replace({"Y": 1, "N": 0}, inplace=True)
+    df["CODE_GENDER"].replace({"F": 1, "M": 0, "XNA": 2}, inplace=True)
 
     # columns to encode using hashing encoder
     columns_using_one_hot_encoder = [
         "OCCUPATION_TYPE",
         "ORGANIZATION_TYPE",
-        "CODE_GENDER",
         "NAME_TYPE_SUITE",
         "NAME_INCOME_TYPE",
         "NAME_EDUCATION_TYPE",
@@ -570,6 +571,37 @@ def scale_numeric_features(
     return df
 
 
+def reduce_dataset_size(
+    df: DataFrame,
+) -> DataFrame:
+    """
+    Reduced the dataset size by changing the datatype of each column.
+
+    Args:
+        df: DataFrame
+            Pandas DataFrame whose size needs to be reduced.
+
+    Returns:
+        DataFrame:
+            Pandas DataFrane with reduced size.
+    """
+    datatype_mapping = get_datatype_mapping_for_reduction()
+    logger.info(
+        f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} reducing dataset size")
+    for column_name, column_data_type in datatype_mapping.items():
+        try:
+            df[column_name] = pd.to_numeric(df[column_name],
+                                            downcast=column_data_type)
+        except Exception as e:
+            logger.info(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
+                f"change datatype of {column_name}")
+            logger.error(
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused -"
+                f"{str(e)}")
+    return df
+
+
 def preprocess_data(
         df: DataFrame,
         preprocessing_configuration: dict,
@@ -600,7 +632,11 @@ def preprocess_data(
             If data passed is test data, then it returns the transformed
             predictors.
     """
+    # reduce dataset size
+    df = reduce_dataset_size(df)
+
     if is_train_data:
+
         # remove duplicate rows
         df = remove_duplicate_rows(df)
 

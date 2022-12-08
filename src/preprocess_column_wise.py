@@ -14,10 +14,9 @@ def column_wise(
         test_df: DataFrame,
 ) -> tuple[DataFrame, DataFrame]:
     # -------------------------------------------------------------------------
-    # CNT_CHILDREN
+    column_name = "CNT_CHILDREN"
     # train data
     # replace all values with cnt_children >=3 with 3
-    column_name = "CNT_CHILDREN"
     logger.info(f"Preprocessing column: {column_name}")
     train_df[column_name].replace([3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 19], 3,
                                   inplace=True)
@@ -29,10 +28,9 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # AMT_INCOME_TOTAL
+    column_name = "AMT_INCOME_TOTAL"
     # train data
     # there are just four samples with income >9000000; let's just drop them
-    column_name = "AMT_INCOME_TOTAL"
     logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
@@ -61,12 +59,12 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # AMT_CREDIT
-    # train data
     column_name = "AMT_CREDIT"
+    # train data
     logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
+    # trim outlier values with the extreme value that is not an outlier
     lowest_outlier_value = more_than_mean[0]
     index_lowest_outlier_value = \
         np.where(unique_values == lowest_outlier_value)[0][0]
@@ -88,9 +86,8 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # AMT_ANNUITY
-    # train data
     column_name = "AMT_ANNUITY"
+    # train data
     logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
@@ -123,9 +120,8 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # AMT_GOODS_PRICE
-    # train data
     column_name = "AMT_GOODS_PRICE"
+    # train data
     logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
@@ -158,9 +154,8 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # REGION_POPULATION_RELATIVE
-    # train data
     column_name = "REGION_POPULATION_RELATIVE"
+    # train data
     logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
@@ -187,8 +182,13 @@ def column_wise(
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # DAYS_BIRTH
     column_name = "DAYS_BIRTH"
     logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DAYS_EMPLOYED"
+    # train data
 
     return train_df, test_df

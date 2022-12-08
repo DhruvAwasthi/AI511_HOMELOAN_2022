@@ -12,6 +12,7 @@ import pandas as pd
 from category_encoders.hashing import HashingEncoder
 from pandas.core.frame import DataFrame
 from pandas.core.series import Series
+from scipy.stats import spearmanr
 
 from config import DUMP_DIR
 
@@ -397,20 +398,32 @@ def get_datatype_mapping_for_reduction():
 
 
 def col_info(df, column_name):
+    logger.info(f"Min value: {df[column_name].min()}")
+    logger.info(f"Max value: {df[column_name].max()}")
+    logger.info(f"Std: {df[column_name].std()}")
+
+    logger.info(f"Pearson's correlation: {df[column_name].corr(df['TARGET'])}")
+    logger.info(f"Spearman's correlation: {spearmanr(df[column_name], df['TARGET'])}")
+    logger.info(f"Missing value(s): {df[column_name].isna().sum()}")
     iqr_range, lower_bound, upper_bound = calculate_iqr_range(
         df[column_name],
         scaled_factor=1.7,
         percentile_range=(25, 75)
     )
+    logger.info(f"Lower bound: {lower_bound}")
+    logger.info(f"Upper bound: {upper_bound}")
     index_of_outliers = df[
         (df[column_name] > upper_bound) | (
                     df[column_name] < lower_bound)].index
     column_index = df[column_name].index
     column_index = column_index.drop(index_of_outliers)
     column_mean_without_outliers = df[column_name][column_index].mean()
+    logger.info(f"Number of outlier(s): {len(index_of_outliers)}")
+    mean_of_column = df[column_name].mean()
+    logger.info(f"Mean with outliers: {mean_of_column}")
+    logger.info(f"Mean without outliers: {column_mean_without_outliers}")
     more_than_mean = list()
     less_than_mean = list()
-    mean_of_column = df[column_name].mean()
     for index, value in df[column_name][index_of_outliers].iteritems():
         if value > mean_of_column:
             if value not in more_than_mean:
@@ -421,6 +434,9 @@ def col_info(df, column_name):
 
     less_than_mean.sort()
     more_than_mean.sort()
+    logger.info(f"Less than mean: {len(less_than_mean)}")
+    logger.info(f"More than mean: {len(more_than_mean)}\n")
 
     unique_values = np.sort(df[column_name].unique())
+    logger.info(f"Unique values: {len(unique_values)}")
     return index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers

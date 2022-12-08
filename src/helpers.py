@@ -405,6 +405,9 @@ def col_info(df, column_name):
     index_of_outliers = df[
         (df[column_name] > upper_bound) | (
                     df[column_name] < lower_bound)].index
+    column_index = df[column_name].index
+    column_index = column_index.drop(index_of_outliers)
+    column_mean_without_outliers = df[column_name][column_index].mean()
     more_than_mean = list()
     less_than_mean = list()
     mean_of_column = df[column_name].mean()
@@ -420,4 +423,4 @@ def col_info(df, column_name):
     more_than_mean.sort()
 
     unique_values = np.sort(df[column_name].unique())
-    return index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound
+    return index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers

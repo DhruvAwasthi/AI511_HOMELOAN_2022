@@ -394,3 +394,30 @@ def get_datatype_mapping_for_reduction():
         "AMT_REQ_CREDIT_BUREAU_YEAR": "unsigned",
     }
     return datatype_mapping
+
+
+def col_info(df, column_name):
+    iqr_range, lower_bound, upper_bound = calculate_iqr_range(
+        df[column_name],
+        scaled_factor=1.7,
+        percentile_range=(25, 75)
+    )
+    index_of_outliers = df[
+        (df[column_name] > upper_bound) | (
+                    df[column_name] < lower_bound)].index
+    more_than_mean = list()
+    less_than_mean = list()
+    mean_of_column = df[column_name].mean()
+    for index, value in df[column_name][index_of_outliers].iteritems():
+        if value > mean_of_column:
+            if value not in more_than_mean:
+                more_than_mean.append(value)
+        elif value < mean_of_column:
+            if value not in less_than_mean:
+                less_than_mean.append(value)
+
+    less_than_mean.sort()
+    more_than_mean.sort()
+
+    unique_values = np.sort(df[column_name].unique())
+    return index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound

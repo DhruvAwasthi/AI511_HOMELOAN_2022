@@ -734,3 +734,13 @@ def preprocess_data(
             df,
             False)
         return predictors, labels
+
+
+def column_wise(
+    df: DataFrame,
+) -> DataFrame:
+    # replace all values with cnt_children >=3 with 3
+    df["CNT_CHILDREN"].replace([3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 19], 3, inplace=True)
+
+
+    return df

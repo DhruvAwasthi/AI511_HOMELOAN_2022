@@ -403,7 +403,7 @@ def col_info(df, column_name):
     logger.info(f"Std: {df[column_name].std()}")
 
     logger.info(f"Pearson's correlation: {df[column_name].corr(df['TARGET'])}")
-    logger.info(f"Spearman's correlation: {spearmanr(df[column_name], df['TARGET'])}")
+    logger.info(f"Spearman's correlation: {spearmanr(df[column_name], df['TARGET'], nan_policy='omit')[0]}")
     logger.info(f"Missing value(s): {df[column_name].isna().sum()}")
     iqr_range, lower_bound, upper_bound = calculate_iqr_range(
         df[column_name],

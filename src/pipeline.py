@@ -16,6 +16,7 @@ from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
 from src.helpers import load_dataset, pickle_dump_object, pickle_load_object
 from src.preprocess import preprocess_data
+from src.preprocess_column_wise import column_wise
 
 logger = logging.getLogger(__name__)
 
@@ -314,6 +315,7 @@ class Pipeline:
                 return
 
             try:
+                train_df, test_df = column_wise(train_df, test_df)
                 self.train_and_test_model(train_df, test_df)
             except Exception as e:
                 print(f"failed to train and test model")

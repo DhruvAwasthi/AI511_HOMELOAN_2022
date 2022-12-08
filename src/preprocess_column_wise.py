@@ -16,14 +16,14 @@ def column_wise(
                                inplace=True)
 
     # test data
-    test_df[column_name].replace([3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 19], 3,
+    test_df[column_name].replace([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 3,
                                      inplace=True)
 
     # AMT_INCOME_TOTAL
     # train data
     # there are just four samples with income >9000000; let's just drop them
     column_name = "AMT_INCOME_TOTAL"
-    index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound = col_info("AMT_INCOME_TOTAL")
+    index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound = col_info(train_df, "AMT_INCOME_TOTAL")
     to_delete_indices = train_df[(train_df[column_name] >= 9000000)].index
     train_df.drop(index=to_delete_indices, inplace=True)
     index_of_outliers = index_of_outliers.drop(to_delete_indices)

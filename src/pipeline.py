@@ -67,10 +67,10 @@ class Pipeline:
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")
         except Exception as e:
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
                 f"built logistic regression model")
-            logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+            logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
                         f"caused - {str(e)}")
         return clf
 
@@ -254,9 +254,9 @@ class Pipeline:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"train dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to load train dataset")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
                 return
 
@@ -264,9 +264,9 @@ class Pipeline:
                 self.train_model(train_df)
             except Exception as e:
                 print(f"failed to train model")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to train model")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
 
         elif test:
@@ -278,18 +278,18 @@ class Pipeline:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"test dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to load train dataset")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
                 return
 
             try:
                 self.test_model(test_df)
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to test model")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
 
         elif train_and_test:
@@ -307,9 +307,9 @@ class Pipeline:
                 logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"test dataset loaded successfully")
             except Exception as e:
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to load datasets")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
                 return
 
@@ -317,8 +317,8 @@ class Pipeline:
                 self.train_and_test_model(train_df, test_df)
             except Exception as e:
                 print(f"failed to train and test model")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"failed to train and test model")
-                logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
+                logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                             f"error caused - {str(e)}")
         return

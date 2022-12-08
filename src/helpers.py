@@ -160,9 +160,9 @@ def pickle_dump_object(
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
                     f"created pickle dump file {file_name}")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to  "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to  "
                     f"create pickle dump file {str(e)}")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                     f"caused - {str(e)}")
     return
 
@@ -192,10 +192,10 @@ def pickle_load_object(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
             f"loaded pickle dump file {file_name}")
     except Exception as e:
-        logger.info(
+        logger.error(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to  "
             f"load pickle dump file {str(e)}")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                     f"caused - {str(e)}")
         return None
     return loaded_object
@@ -233,9 +233,9 @@ def feature_hashing_encoder(
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} hash "
                     f"encoder for feature hashing trained successfully")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
                     f"train hashing encoder for feature hashing")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
                     f"caused - {str(e)}")
     return hashing_encoder
 
@@ -269,10 +269,10 @@ def transform_data_using_hashing_encoder(
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
                     f"encoded categorical data using hashing encoder")
     except Exception as e:
-        logger.info(
+        logger.error(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to encode"
             f"categorical data using hashing encoder")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error"
                     f"caused - {str(e)}")
     return df
 

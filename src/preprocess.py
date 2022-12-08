@@ -91,9 +91,9 @@ def drop_columns_with_low_std(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} there "
                 f"are no columns with standard deviation value lower than defined")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} could not"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} could not"
                     f"delete columns with low standard deviation value")
-        logger.info(
+        logger.error(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
             f"{str(e)}")
     return df
@@ -163,9 +163,9 @@ def drop_unnecessary_columns(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} successfully "
             f"dropped unnecessary columns")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} couldn't"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} couldn't"
                     f"delete unnecessary columns")
-        logger.info(
+        logger.error(
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error caused: "
             f"{str(e)}")
     return df
@@ -318,9 +318,9 @@ def deal_missing_value_for_categorical_columns(
             f"created missing values replacing criteria for categorical "
             f"features")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to"
                     f"create missing replacing criteria for categorical columns")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                     f"caused - {str(e)}")
         return df
 
@@ -331,10 +331,10 @@ def deal_missing_value_for_categorical_columns(
                 f"missing values in {column_name} with {replace_with_value}")
             df[column_name].fillna(replace_with_value, inplace=True)
         except Exception as e:
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
                 f"replace missing values of {column_name}")
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                 f"caused - {str(e)}")
     return df
@@ -414,9 +414,9 @@ def deal_missing_value_for_numerical_columns(
             f"created missing values replacing criteria for numerical "
             f"features")
     except Exception as e:
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to"
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to"
                     f"create missing replacing criteria for numerical columns")
-        logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
+        logger.error(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                     f"caused - {str(e)}")
         return df
 
@@ -427,10 +427,10 @@ def deal_missing_value_for_numerical_columns(
                 f"missing values in {column_name} with {replace_with_value}")
             df[column_name].fillna(replace_with_value, inplace=True)
         except Exception as e:
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
                 f"replace missing values of {column_name}")
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} error "
                 f"caused - {str(e)}")
     return df
@@ -593,7 +593,7 @@ def reduce_dataset_size(
             df[column_name] = pd.to_numeric(df[column_name],
                                             downcast=column_data_type)
         except Exception as e:
-            logger.info(
+            logger.error(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} failed to "
                 f"change datatype of {column_name}")
             logger.error(

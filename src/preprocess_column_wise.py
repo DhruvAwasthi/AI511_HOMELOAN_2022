@@ -656,4 +656,88 @@ def column_wise(
     logger.info(f"No steps required!")
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "APARTMENTS_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 935588, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "BASEMENTAREA_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 107956, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "YEARS_BEGINEXPLUATATION_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 89883, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "YEARS_BUILD_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 122733, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "COMMONAREA_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 128945, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "ELEVATORS_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 98302, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "ENTRANCES_AVG"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 92790, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

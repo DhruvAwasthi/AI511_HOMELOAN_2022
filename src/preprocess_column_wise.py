@@ -824,4 +824,172 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "APARTMENTS_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 93558, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "BASEMENTAREA_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 107956, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "YEARS_BEGINEXPLUATATION_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 89883, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "YEARS_BUILD_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 122733, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "COMMONAREA_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 128945, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "ELEVATORS_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 98302, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "ENTRANCES_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 92790, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLOORSMAX_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 91709, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLOORSMIN_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 125218, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "LANDAREA_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 109525, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "LIVINGAPARTMENTS_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 126188, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "LIVINGAREA_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 92517, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NONLIVINGAPARTMENTS_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 128121, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NONLIVINGAREA_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 101769, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

@@ -19,13 +19,10 @@ def column_wise(
     logger.info(f"Preprocessing column: {column_name}")
     # train data
     # replace all values with cnt_children >=3 with 3
-    train_df[column_name].replace([3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 19], 3,
-                                  inplace=True)
+    train_df.loc[train_df[column_name] >= 3, column_name] = 3
 
     # test data
-    test_df[column_name].replace(
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 3,
-        inplace=True)
+    test_df.loc[test_df[column_name] >= 3, column_name] = 3
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
@@ -192,7 +189,7 @@ def column_wise(
     index_of_outliers = index_of_outliers.drop(to_delete_indices)
     # trim outlier values with the extreme value that is not an outlier
     indices_of_more_than_mean = train_df[train_df[column_name] == more_than_mean[0]].index
-    train_df[column_name].replace([365243], 0, inplace=True)
+    train_df.loc[train_df[column_name] >= 0, column_name] = 0
     index_of_outliers = index_of_outliers.drop(indices_of_more_than_mean)
     lowest_outlier_value = less_than_mean[-1]
     index_lowest_outlier_value = \
@@ -1170,6 +1167,58 @@ def column_wise(
 
     # test data
     test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "OBS_30_CNT_SOCIAL_CIRCLE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DEF_30_CNT_SOCIAL_CIRCLE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    # replace all values with def_30_cnt_social_circle >=3 with 3
+    train_df.loc[train_df[column_name] > 2, column_name] = 2
+    # replace missing values with mode of column
+    mode = train_df[column_name].mode()[0]
+    train_df[column_name].fillna(mode, inplace=True)
+
+    # test data
+    test_df.loc[test_df[column_name] > 2, column_name] = 2
+    test_df[column_name].fillna(mode, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "OBS_60_CNT_SOCIAL_CIRCLE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DEF_60_CNT_SOCIAL_CIRCLE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    # replace all values with def_30_cnt_social_circle >=3 with 3
+    train_df.loc[train_df[column_name] > 2, column_name] = 2
+    # replace missing values with mode of column
+    mode = train_df[column_name].mode()[0]
+    train_df[column_name].fillna(mode, inplace=True)
+
+    # test data
+    test_df.loc[test_df[column_name] > 2, column_name] = 2
+    test_df[column_name].fillna(mode, inplace=True)
     # -------------------------------------------------------------------------
 
     return train_df, test_df

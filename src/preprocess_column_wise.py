@@ -13,11 +13,12 @@ def column_wise(
         train_df: DataFrame,
         test_df: DataFrame,
 ) -> tuple[DataFrame, DataFrame]:
+
     # -------------------------------------------------------------------------
     column_name = "CNT_CHILDREN"
+    logger.info(f"Preprocessing column: {column_name}")
     # train data
     # replace all values with cnt_children >=3 with 3
-    logger.info(f"Preprocessing column: {column_name}")
     train_df[column_name].replace([3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 19], 3,
                                   inplace=True)
 
@@ -29,9 +30,9 @@ def column_wise(
 
     # -------------------------------------------------------------------------
     column_name = "AMT_INCOME_TOTAL"
+    logger.info(f"Preprocessing column: {column_name}")
     # train data
     # there are just four samples with income >9000000; let's just drop them
-    logger.info(f"Preprocessing column: {column_name}")
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
     to_delete_indices = train_df[(train_df[column_name] >= 9000000)].index
@@ -51,17 +52,16 @@ def column_wise(
         index_lowest_outlier_value - 1]
 
     # test data
-    index_of_outliers = test_df[
-        (test_df[column_name] > upper_bound) | (
-                test_df[column_name] < lower_bound)].index
+    index_of_outliers = test_df[test_df[column_name] > unique_values[
+        index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
         index_lowest_outlier_value - 1]
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "AMT_CREDIT"
-    # train data
     logger.info(f"Preprocessing column: {column_name}")
+    # train data
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
     # trim outlier values with the extreme value that is not an outlier
@@ -78,17 +78,16 @@ def column_wise(
         index_lowest_outlier_value - 1]
 
     # test data
-    index_of_outliers = test_df[
-        (test_df[column_name] > upper_bound) | (
-                test_df[column_name] < lower_bound)].index
+    index_of_outliers = test_df[test_df[column_name] > unique_values[
+        index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
         index_lowest_outlier_value - 1]
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "AMT_ANNUITY"
-    # train data
     logger.info(f"Preprocessing column: {column_name}")
+    # train data
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
     # there is one sample with amt_annuity >= 258025.5; let's just drop it
@@ -111,18 +110,16 @@ def column_wise(
     train_df[column_name].fillna(column_mean_without_outliers, inplace=True)
 
     # test data
-    index_of_outliers = test_df[
-        (test_df[column_name] > upper_bound) | (
-                test_df[column_name] < lower_bound)].index
+    index_of_outliers = test_df[test_df[column_name] > unique_values[
+        index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
         index_lowest_outlier_value - 1]
-    test_df[column_name].fillna(column_mean_without_outliers, inplace=True)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "AMT_GOODS_PRICE"
-    # train data
     logger.info(f"Preprocessing column: {column_name}")
+    # train data
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
     # there are 9 sample with amt_goods_price >= 3375000.0; let's just drop them
@@ -145,18 +142,16 @@ def column_wise(
     train_df[column_name].fillna(column_mean_without_outliers, inplace=True)
 
     # test data
-    index_of_outliers = test_df[
-        (test_df[column_name] > upper_bound) | (
-                test_df[column_name] < lower_bound)].index
+    index_of_outliers = test_df[test_df[column_name] > unique_values[
+        index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
         index_lowest_outlier_value - 1]
-    test_df[column_name].fillna(column_mean_without_outliers, inplace=True)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "REGION_POPULATION_RELATIVE"
-    # train data
     logger.info(f"Preprocessing column: {column_name}")
+    # train data
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
     # trim outlier values with the extreme value that is not an outlier
@@ -174,9 +169,7 @@ def column_wise(
         index_lowest_outlier_value - 1]
 
     # test data
-    index_of_outliers = test_df[
-        (test_df[column_name] > upper_bound) | (
-                test_df[column_name] < lower_bound)].index
+    index_of_outliers = test_df[test_df[column_name] > unique_values[index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
         index_lowest_outlier_value - 1]
     # -------------------------------------------------------------------------
@@ -189,6 +182,41 @@ def column_wise(
 
     # -------------------------------------------------------------------------
     column_name = "DAYS_EMPLOYED"
+    logger.info(f"Preprocessing column: {column_name}")
     # train data
+    index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
+        train_df, column_name)
+    # there are 6 samples with days_employed <= 17139; let's just drop them
+    to_delete_indices = train_df[(train_df[column_name] <= -17139)].index
+    train_df.drop(index=to_delete_indices, inplace=True)
+    index_of_outliers = index_of_outliers.drop(to_delete_indices)
+    # trim outlier values with the extreme value that is not an outlier
+    indices_of_more_than_mean = train_df[train_df[column_name] == more_than_mean[0]].index
+    train_df[column_name].replace([365243], 0, inplace=True)
+    index_of_outliers = index_of_outliers.drop(indices_of_more_than_mean)
+    lowest_outlier_value = less_than_mean[-1]
+    index_lowest_outlier_value = \
+    np.where(unique_values == lowest_outlier_value)[0][0]
+    logger.info(f"Lowest outlier value in unique values: {lowest_outlier_value}")
+    logger.info(
+        f"Index of lowest outlier value in unique values: {index_lowest_outlier_value}")
+    logger.info(
+        f"Outliers will be trimmed to: {unique_values[index_lowest_outlier_value + 1]}")
+    train_df.loc[index_of_outliers, column_name] = unique_values[
+        index_lowest_outlier_value + 1]
+
+    # test data
+    index_of_outliers = test_df[test_df[column_name] > 0].index
+    test_df.loc[index_of_outliers, column_name] = 0
+    index_of_outliers = test_df[test_df[column_name] < unique_values[index_lowest_outlier_value + 1]].index
+    test_df.loc[index_of_outliers, column_name] = unique_values[index_lowest_outlier_value + 1]
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DAYS_REGISTRATION"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    # test data
+    # -------------------------------------------------------------------------
 
     return train_df, test_df

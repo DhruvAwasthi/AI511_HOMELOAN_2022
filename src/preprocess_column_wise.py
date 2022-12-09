@@ -1221,4 +1221,70 @@ def column_wise(
     test_df[column_name].fillna(mode, inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_HOUR"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_DAY"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_WEEK"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_MON"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_QRT"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "AMT_REQ_CREDIT_BUREAU_YEAR"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

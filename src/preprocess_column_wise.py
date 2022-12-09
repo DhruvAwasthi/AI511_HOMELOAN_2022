@@ -1436,4 +1436,151 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "WEEKDAY_APPR_PROCESS_START"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "ORGANIZATION_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    train_df[column_name].replace(
+        ["Business Entity Type 1", "Business Entity Type 2",
+         "Business Entity Type 3"], "Business", inplace=True)
+    train_df[column_name].replace(
+        ["Transport: type 1", "Transport: type 2", "Transport: type 3",
+         "Transport: type 4"], "Transport", inplace=True)
+    train_df[column_name].replace(
+        ["Trade: type 1", "Trade: type 2", "Trade: type 3", "Trade: type 4",
+         "Trade: type 5", "Trade: type 6", "Trade: type 7"], "Trade",
+        inplace=True)
+    train_df[column_name].replace(["Kindergarten", "School", "University"],
+                            "Education", inplace=True)
+    train_df[column_name].replace(["Restaurant", "Hotel"], "Dining", inplace=True)
+    train_df[column_name].replace(
+        ["Industry: type 1", "Industry: type 2", "Industry: type 3",
+         "Industry: type 4", "Industry: type 5", "Industry: type 6",
+         "Industry: type 7", "Industry: type 8", "Industry: type 9",
+         "Industry: type 10", "Industry: type 11", "Industry: type 12",
+         "Industry: type 13"], "Industry", inplace=True)
+    train_df[column_name].replace(
+        ["Insurance", "Legal Services", "Services", "Postal"], "Services",
+        inplace=True)
+    train_df[column_name].replace(["Mobile", "Telecom"], "Mobile", inplace=True)
+    train_df[column_name].replace(["Housing", "Cleaning"], "Housing", inplace=True)
+    train_df[column_name].replace(["Realtor", "Construction"], "Realtor",
+                            inplace=True)
+    train_df[column_name].replace(["Culture", "Religion"], "Culture", inplace=True)
+    train_df[column_name].replace(
+        ["Military", "Police", "Security Ministries", "Emergency", "Security"],
+        "Security", inplace=True)
+    train_df[column_name].value_counts()
+    
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
+
+    # test data
+    test_df[column_name].replace(
+        ["Business Entity Type 1", "Business Entity Type 2",
+         "Business Entity Type 3"], "Business", inplace=True)
+    test_df[column_name].replace(
+        ["Transport: type 1", "Transport: type 2", "Transport: type 3",
+         "Transport: type 4"], "Transport", inplace=True)
+    test_df[column_name].replace(
+        ["Trade: type 1", "Trade: type 2", "Trade: type 3", "Trade: type 4",
+         "Trade: type 5", "Trade: type 6", "Trade: type 7"], "Trade",
+        inplace=True)
+    test_df[column_name].replace(["Kindergarten", "School", "University"],
+                            "Education", inplace=True)
+    test_df[column_name].replace(["Restaurant", "Hotel"], "Dining", inplace=True)
+    test_df[column_name].replace(
+        ["Industry: type 1", "Industry: type 2", "Industry: type 3",
+         "Industry: type 4", "Industry: type 5", "Industry: type 6",
+         "Industry: type 7", "Industry: type 8", "Industry: type 9",
+         "Industry: type 10", "Industry: type 11", "Industry: type 12",
+         "Industry: type 13"], "Industry", inplace=True)
+    test_df[column_name].replace(
+        ["Insurance", "Legal Services", "Services", "Postal"], "Services",
+        inplace=True)
+    test_df[column_name].replace(["Mobile", "Telecom"], "Mobile", inplace=True)
+    test_df[column_name].replace(["Housing", "Cleaning"], "Housing", inplace=True)
+    test_df[column_name].replace(["Realtor", "Construction"], "Realtor",
+                            inplace=True)
+    test_df[column_name].replace(["Culture", "Religion"], "Culture", inplace=True)
+    test_df[column_name].replace(
+        ["Military", "Police", "Security Ministries", "Emergency", "Security"],
+        "Security", inplace=True)
+    test_df[column_name].value_counts()
+    
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FONDKAPREMONT_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 126230, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "HOUSETYPE_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 92465, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "WALLSMATERIAL_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 93704, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "EMERGENCYSTATE_MODE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 87319, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

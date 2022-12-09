@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
+from sklearn.preprocessing import OneHotEncoder
 
 from src.helpers import col_info
 
@@ -1281,6 +1282,154 @@ def column_wise(
     logger.info(f"Preprocessing column: {column_name}")
     # train data
     logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_CONTRACT_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    mapping_dict = {
+        "Cash loans": 0,
+        "Revolving loans": 1,
+    }
+    # train data
+    train_df[column_name].replace(mapping_dict, inplace=True)
+
+    # test data
+    test_df[column_name].replace(mapping_dict, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "CODE_GENDER"
+    logger.info(f"Preprocessing column: {column_name}")
+    mapping_dict = {
+        "F": 0,
+        "M": 1,
+        "XNA": 2
+    }
+    # train data
+    train_df[column_name].replace(mapping_dict, inplace=True)
+
+    # test data
+    test_df[column_name].replace(mapping_dict, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_OWN_CAR"
+    logger.info(f"Preprocessing column: {column_name}")
+    mapping_dict = {
+        "N": 0,
+        "Y": 1,
+    }
+    # train data
+    train_df[column_name].replace(mapping_dict, inplace=True)
+
+    # test data
+    test_df[column_name].replace(mapping_dict, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_OWN_REALTY"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_TYPE_SUITE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_INCOME_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    mapping_dict = {
+        "Working": 2,
+        "Commercial associate": 2,
+        "Pensioner": 1,
+        "State servant": 3,
+        "Unemployed": 0,
+        "Businessman": 3
+    }
+
+    # train data
+    train_df[column_name].replace(["Student"], "Unemployed", inplace=True)
+    train_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
+    train_df[column_name].replace(mapping_dict, inplace=True)
+
+    # test data
+    test_df[column_name].replace(["Student"], "Unemployed", inplace=True)
+    test_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
+    test_df[column_name].replace(mapping_dict, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_EDUCATION_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    mapping_dict = {
+        "Secondary / secondary special": 3,
+        "Higher education": 2,
+        "Incomplete higher": 1,
+        "Lower secondary": 0,
+        "Academic degree": 4,
+    }
+
+    # train data
+    train_df[column_name].replace(mapping_dict, inplace=True)
+
+    # test data
+    test_df[column_name].replace(mapping_dict, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_FAMILY_STATUS"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "NAME_HOUSING_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
+
+    # test data
+    encoded_df = pd.DataFrame(encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "OCCUPATION_TYPE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since number of missing values is huge i.e., 57854, hence dropping column")
     train_df.drop(columns=[column_name], inplace=True)
 
     # test data

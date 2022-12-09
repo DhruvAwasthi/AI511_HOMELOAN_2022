@@ -605,4 +605,55 @@ def column_wise(
     test_df[column_name].replace([21, 22, 23, 0, 1, 2], 21, inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "REG_REGION_NOT_LIVE_REGION"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "REG_REGION_NOT_WORK_REGION"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "LIVE_REGION_NOT_WORK_REGION"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "REG_CITY_NOT_LIVE_CITY"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "REG_CITY_NOT_WORK_CITY"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "LIVE_CITY_NOT_WORK_CITY"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

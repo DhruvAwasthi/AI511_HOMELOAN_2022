@@ -278,4 +278,261 @@ def column_wise(
         index_lowest_outlier_value + 1]
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "OWN_CAR_AGE"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"Since number of missing values is huge i.e., 121614, hence dropping column")
+    # train data
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_MOBIL"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_EMP_PHONE"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_WORK_PHONE"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_CONT_MOBILE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_PHONE"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_EMAIL"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_2"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_3"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_4"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_5"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_6"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_7"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_8"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_9"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_10"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_11"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_12"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since all values are same, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_13"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_14"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_15"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_16"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_17"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_18"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_19"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_20"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "FLAG_DOCUMENT_21"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

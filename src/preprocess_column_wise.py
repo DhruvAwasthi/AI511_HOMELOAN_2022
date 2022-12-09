@@ -571,4 +571,38 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "CNT_FAM_MEMBERS"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since correlation value is too low, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "REGION_RATING_CLIENT"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "REGION_RATING_CLIENT_W_CITY"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "HOUR_APPR_PROCESS_START"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    # replace all values with  >=9 with 3
+    train_df[column_name].replace([21, 22, 23, 0, 1, 2], 21, inplace=True)
+
+    # test data
+    test_df[column_name].replace([21, 22, 23, 0, 1, 2], 21, inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

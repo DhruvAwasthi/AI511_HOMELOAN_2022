@@ -216,7 +216,66 @@ def column_wise(
     column_name = "DAYS_REGISTRATION"
     logger.info(f"Preprocessing column: {column_name}")
     # train data
+    index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
+        train_df, column_name)
+    # there are 8 samples with days_registration <= 21146; let's just drop them
+    to_delete_indices = train_df[(train_df[column_name] <= -21146)].index
+    train_df.drop(index=to_delete_indices, inplace=True)
+    index_of_outliers = index_of_outliers.drop(to_delete_indices)
+    lowest_outlier_value = less_than_mean[-1]
+    index_lowest_outlier_value = \
+        np.where(unique_values == lowest_outlier_value)[0][0]
+    logger.info(
+        f"Lowest outlier value in unique values: {lowest_outlier_value}")
+    logger.info(
+        f"Index of lowest outlier value in unique values: {index_lowest_outlier_value}")
+    logger.info(
+        f"Outliers will be trimmed to: {unique_values[index_lowest_outlier_value + 1]}")
+    train_df.loc[index_of_outliers, column_name] = unique_values[
+        index_lowest_outlier_value + 1]
+
     # test data
+    index_of_outliers = test_df[test_df[column_name] < unique_values[
+        index_lowest_outlier_value + 1]].index
+    test_df.loc[index_of_outliers, column_name] = unique_values[
+        index_lowest_outlier_value + 1]
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DAYS_ID_PUBLISH"
+    logger.info(f"Preprocessing column: {column_name}")
+    logger.info(f"No steps required!")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "DAYS_LAST_PHONE_CHANGE"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
+        train_df, column_name)
+    # there is just 1 missing value; let's just replace it with mean calculated without outliers
+    train_df[column_name].fillna(column_mean_without_outliers, inplace=True)
+    # there are 7 samples with days_last_phone_change <= 4115.0; let's just drop them
+    to_delete_indices = train_df[(train_df[column_name] <= -4115.0)].index
+    train_df.drop(index=to_delete_indices, inplace=True)
+    index_of_outliers = index_of_outliers.drop(to_delete_indices)
+    lowest_outlier_value = less_than_mean[-1]
+    index_lowest_outlier_value = \
+        np.where(unique_values == lowest_outlier_value)[0][0]
+    logger.info(
+        f"Lowest outlier value in unique values: {lowest_outlier_value}")
+    logger.info(
+        f"Index of lowest outlier value in unique values: {index_lowest_outlier_value}")
+    logger.info(
+        f"Outliers will be trimmed to: {unique_values[index_lowest_outlier_value + 1]}")
+    train_df.loc[index_of_outliers, column_name] = unique_values[
+        index_lowest_outlier_value + 1]
+
+    # test data
+    index_of_outliers = test_df[test_df[column_name] < unique_values[
+        index_lowest_outlier_value + 1]].index
+    test_df.loc[index_of_outliers, column_name] = unique_values[
+        index_lowest_outlier_value + 1]
     # -------------------------------------------------------------------------
 
     return train_df, test_df

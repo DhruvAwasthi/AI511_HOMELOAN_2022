@@ -535,4 +535,40 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------
+    column_name = "EXT_SOURCE_1"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since number of missing values is huge i.e., 104055, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "EXT_SOURCE_2"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(f"Since number of missing values relatively low i.e., 413, hence replacing them with median as more than 50% values "
+                f"are inside 0.56 and median is close to this value, while mean is 0.52.")
+    median_value = train_df[column_name].median()
+    train_df.fillna(median_value, inplace=True)
+
+    # test data
+    test_df.fillna(median_value, inplace=True)
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    column_name = "EXT_SOURCE_3"
+    logger.info(f"Preprocessing column: {column_name}")
+    # train data
+    logger.info(
+        f"Since number of missing values is huge i.e., 36648, hence dropping column")
+    train_df.drop(columns=[column_name], inplace=True)
+
+    # test data
+    test_df.drop(columns=[column_name], inplace=True)
+    # -------------------------------------------------------------------------
+
     return train_df, test_df

@@ -13,6 +13,7 @@ from category_encoders.hashing import HashingEncoder
 from pandas.core.frame import DataFrame
 from pandas.core.series import Series
 from scipy.stats import spearmanr
+from sklearn.linear_model import LinearRegression
 
 from config import DUMP_DIR
 
@@ -440,3 +441,14 @@ def col_info(df, column_name):
     unique_values = np.sort(df[column_name].unique())
     logger.info(f"Unique values: {len(unique_values)}")
     return index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers
+
+
+def impute_data_lin_eq(
+    df,
+    features,
+):
+
+    predictors = df.iloc[:, :-1]
+    labels = df.iloc[:, -1]
+    model = LinearRegression().fit(predictors, labels)
+    return

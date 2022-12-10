@@ -122,6 +122,8 @@ def column_wise(
     # train data
     index_of_outliers, less_than_mean, more_than_mean, unique_values, iqr_range, lower_bound, upper_bound, column_mean_without_outliers = col_info(
         train_df, column_name)
+    mode = train_df[column_name].mode()[0]
+    train_df[column_name].fillna(mode, inplace=True)
     # there are 9 sample with amt_goods_price >= 3375000.0; let's just drop them
     to_delete_indices = train_df[(train_df[column_name] >= 3375000.0)].index
     train_df.drop(index=to_delete_indices, inplace=True)
@@ -142,6 +144,7 @@ def column_wise(
     train_df[column_name].fillna(column_mean_without_outliers, inplace=True)
 
     # test data
+    test_df[column_name].fillna(mode, inplace=True)
     index_of_outliers = test_df[test_df[column_name] > unique_values[
         index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
@@ -553,10 +556,10 @@ def column_wise(
     logger.info(f"Since number of missing values relatively low i.e., 413, hence replacing them with median as more than 50% values "
                 f"are inside 0.56 and median is close to this value, while mean is 0.52.")
     median_value = train_df[column_name].median()
-    train_df.fillna(median_value, inplace=True)
+    train_df[column_name].fillna(median_value, inplace=True)
 
     # test data
-    test_df.fillna(median_value, inplace=True)
+    test_df[column_name].fillna(median_value, inplace=True)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
@@ -1400,63 +1403,117 @@ def column_wise(
     logger.info(f"Since correlation value is too low, hence dropping column")
     mode = train_df[column_name].mode()[0]
     train_df[column_name].fillna(mode, inplace=True)
-    mapping_dict = {
-        "Unaccompanied": 0,
-        "Family": 1,
-        "Spouse, partner": 2,
-        "Children": 3,
-        "Other_B": 4,
-        "Other_A": 5,
-        "Group of people": 6,
-    }
-    train_df[column_name].replace(mapping_dict, inplace=True)
+    # mapping_dict = {
+    #     "Unaccompanied": 0,
+    #     "Family": 1,
+    #     "Spouse, partner": 2,
+    #     "Children": 3,
+    #     "Other_B": 4,
+    #     "Other_A": 5,
+    #     "Group of people": 6,
+    # }
+    # train_df[column_name].replace(mapping_dict, inplace=True)
     # train_df.drop(columns=[column_name], inplace=True)
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
 
     # test data
     test_df[column_name].fillna(mode, inplace=True)
-    test_df[column_name].replace(mapping_dict, inplace=True)
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
+    # test_df[column_name].replace(mapping_dict, inplace=True)
     # test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "NAME_INCOME_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
-    mapping_dict = {
-        "Working": 2,
-        "Commercial associate": 2,
-        "Pensioner": 1,
-        "State servant": 3,
-        "Unemployed": 0,
-        "Businessman": 3
-    }
-
-    # train data
-    train_df[column_name].replace(["Student"], "Unemployed", inplace=True)
-    train_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
-    train_df[column_name].replace(mapping_dict, inplace=True)
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
 
     # test data
-    test_df[column_name].replace(["Student"], "Unemployed", inplace=True)
-    test_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
-    test_df[column_name].replace(mapping_dict, inplace=True)
+    test_df[column_name].fillna(mode, inplace=True)
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
+    # mapping_dict = {
+    #     "Working": 2,
+    #     "Commercial associate": 2,
+    #     "Pensioner": 1,
+    #     "State servant": 3,
+    #     "Unemployed": 0,
+    #     "Businessman": 3
+    # }
+    #
+    # # train data
+    # train_df[column_name].replace(["Student"], "Unemployed", inplace=True)
+    # train_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
+    # train_df[column_name].replace(mapping_dict, inplace=True)
+    #
+    # # test data
+    # test_df[column_name].replace(["Student"], "Unemployed", inplace=True)
+    # test_df[column_name].replace(["Maternity leave"], "Pensioner", inplace=True)
+    # test_df[column_name].replace(mapping_dict, inplace=True)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
     column_name = "NAME_EDUCATION_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
-    mapping_dict = {
-        "Secondary / secondary special": 3,
-        "Higher education": 2,
-        "Incomplete higher": 1,
-        "Lower secondary": 0,
-        "Academic degree": 4,
-    }
-
-    # train data
-    train_df[column_name].replace(mapping_dict, inplace=True)
+    # mapping_dict = {
+    #     "Secondary / secondary special": 3,
+    #     "Higher education": 2,
+    #     "Incomplete higher": 1,
+    #     "Lower secondary": 0,
+    #     "Academic degree": 4,
+    # }
+    #
+    # # train data
+    # train_df[column_name].replace(mapping_dict, inplace=True)
+    #
+    # # test data
+    # test_df[column_name].replace(mapping_dict, inplace=True)
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
 
     # test data
-    test_df[column_name].replace(mapping_dict, inplace=True)
+    test_df[column_name].fillna(mode, inplace=True)
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
@@ -1464,20 +1521,39 @@ def column_wise(
     logger.info(f"Preprocessing column: {column_name}")
     # train data
     logger.info(f"Since correlation value is too low, hence dropping column")
-    mapping_dict = {
-        "Married": 0,
-        "Single / not married": 1,
-        "Civil marriage": 2,
-        "Separated": 3,
-        "Widow": 4,
-        "Unknown": 5,
-    }
-    train_df[column_name].replace(mapping_dict, inplace=True)
-    # train_df.drop(columns=[column_name], inplace=True)
+    # mapping_dict = {
+    #     "Married": 0,
+    #     "Single / not married": 1,
+    #     "Civil marriage": 2,
+    #     "Separated": 3,
+    #     "Widow": 4,
+    #     "Unknown": 5,
+    # }
+    # train_df[column_name].replace(mapping_dict, inplace=True)
+    # # train_df.drop(columns=[column_name], inplace=True)
+    #
+    # # test data
+    # test_df[column_name].replace(mapping_dict, inplace=True)
+    # # test_df.drop(columns=[column_name], inplace=True)
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
 
     # test data
-    test_df[column_name].replace(mapping_dict, inplace=True)
-    # test_df.drop(columns=[column_name], inplace=True)
+    test_df[column_name].fillna(mode, inplace=True)
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
@@ -1516,22 +1592,41 @@ def column_wise(
     logger.info(f"Preprocessing column: {column_name}")
     # train data
     logger.info(f"Since Since correlation value is too low, hence dropping column")
-    train_df[column_name].replace(["SATURDAY", "SUNDAY"], "WEEKEND", inplace=True)
-    mapping_dict = {
-        "WEEKEND": 0,
-        "MONDAY": 1,
-        "TUESDAY": 2,
-        "WEDNESDAY": 3,
-        "THURSDAY": 4,
-        "FRIDAY": 5,
-    }
-    train_df[column_name].replace(mapping_dict, inplace=True)
-    # train_df.drop(columns=[column_name], inplace=True)
+    # train_df[column_name].replace(["SATURDAY", "SUNDAY"], "WEEKEND", inplace=True)
+    # mapping_dict = {
+    #     "WEEKEND": 0,
+    #     "MONDAY": 1,
+    #     "TUESDAY": 2,
+    #     "WEDNESDAY": 3,
+    #     "THURSDAY": 4,
+    #     "FRIDAY": 5,
+    # }
+    # train_df[column_name].replace(mapping_dict, inplace=True)
+    # # train_df.drop(columns=[column_name], inplace=True)
+    #
+    # # test data
+    # test_df[column_name].replace(["SATURDAY", "SUNDAY"], "WEEKEND", inplace=True)
+    # test_df[column_name].replace(mapping_dict, inplace=True)
+    # # test_df.drop(columns=[column_name], inplace=True)
+    unique_values = train_df[column_name].unique()
+    encoder = OneHotEncoder()
+    encoded_df = pd.DataFrame(
+        encoder.fit_transform(train_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    train_df.drop(columns=[column_name], axis=1, inplace=True)
+    train_df.index = encoded_df.index
+    train_df = train_df.join(encoded_df)
 
     # test data
-    test_df[column_name].replace(["SATURDAY", "SUNDAY"], "WEEKEND", inplace=True)
-    test_df[column_name].replace(mapping_dict, inplace=True)
-    # test_df.drop(columns=[column_name], inplace=True)
+    test_df[column_name].fillna(mode, inplace=True)
+    encoded_df = pd.DataFrame(
+        encoder.transform(test_df[[column_name]]).toarray())
+    encoded_df.columns = [column_name + "_" + str(idx) for idx in
+                          range(len(unique_values))]
+    test_df.drop(columns=[column_name], axis=1, inplace=True)
+    test_df.index = encoded_df.index
+    test_df = test_df.join(encoded_df)
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------

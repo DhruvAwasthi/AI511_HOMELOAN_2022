@@ -16,6 +16,7 @@ from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
 from src.helpers import load_dataset, pickle_dump_object, pickle_load_object
 from src.preprocess import preprocess_data
+from src.preprocess_column_wise import column_wise
 
 logger = logging.getLogger(__name__)
 
@@ -39,31 +40,30 @@ class Pipeline:
         try:
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"building the logistic regression model")
-            # clf = LogisticRegression(
+            clf = LogisticRegression(
+                random_state=self.model_configuration["random_state"],
+                max_iter=self.model_configuration["max_iter"],
+                # solver="saga",
+                # penalty="elasticnet",
+                # l1_ratio=0.5,
+                # n_jobs=-1,
+            )
+            # clf1 = HistGradientBoostingClassifier(
             #     random_state=self.model_configuration["random_state"],
-            #     max_iter=self.model_configuration["max_iter"],
-            #     # solver="saga",
-            #     # penalty="elasticnet",
-            #     # l1_ratio=0.5,
+            # )
+            # clf2 = AdaBoostClassifier(
+            #    n_estimators=100,
+            #    random_state=self.model_configuration["random_state"],
+            # )
+            # clf3 = GradientBoostingClassifier(
+            #    n_estimators=100,
+            #    random_state=self.model_configuration["random_state"],
+            # )
+            # clf = StackingClassifier(
+            #     estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
+            #     final_estimator=LogisticRegression(),
             #     n_jobs=-1,
             # )
-            clf1 = HistGradientBoostingClassifier(
-                random_state=self.model_configuration["random_state"],
-                categorical_features=[1, 2, 3, 4, 10, 11, 12, 13, 14, 27, 31, 39, 85, 86, 88, 89]
-            )
-            clf2 = AdaBoostClassifier(
-               n_estimators=100,
-               random_state=self.model_configuration["random_state"],
-            )
-            clf3 = GradientBoostingClassifier(
-               n_estimators=100,
-               random_state=self.model_configuration["random_state"],
-            )
-            clf = StackingClassifier(
-                estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
-                final_estimator=LogisticRegression(),
-                n_jobs=-1,
-            )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")
         except Exception as e:
@@ -100,10 +100,13 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing data")
-        predictors, labels = preprocess_data(train_df,
-                                             self.preprocessing_configuration,
-                                             is_train_data=True
-                                             )
+
+        predictors = train_df.iloc[:, :-1]
+        labels = train_df.iloc[:, -1]
+        # predictors, labels = preprocess_data(train_df,
+        #                                      self.preprocessing_configuration,
+        #                                      is_train_data=True
+        #                                      )
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
 
@@ -125,7 +128,7 @@ class Pipeline:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
                 f"model - iteration {iter}")
-            X_train, X_val = predictors[train_indices], predictors[val_indices]
+            X_train, X_val = predictors.iloc[train_indices], predictors.iloc[val_indices]
             y_train, y_val = labels.loc[train_indices], labels.loc[val_indices]
             clf.fit(X_train, y_train)
             logger.info(
@@ -167,10 +170,10 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing test data")
-        predictors, _ = preprocess_data(test_df,
-                                        self.preprocessing_configuration,
-                                        is_test_data=True
-                                        )
+        test_unique_column = test_df[["SK_ID_CURR"]]
+        test_new_df_dropped = test_df.drop(columns=["SK_ID_CURR"], axis=1)
+        predictors = test_new_df_dropped.iloc[:, :]
+
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
 
@@ -184,7 +187,7 @@ class Pipeline:
         # make predictions
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting on test data")
-        unique_identifier = test_df[["SK_ID_CURR"]]
+
         predictions = clf.predict(predictors)
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting done on test data")
@@ -193,7 +196,7 @@ class Pipeline:
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"saving predictions")
         submission_df = pd.DataFrame(columns=["SK_ID_CURR", "TARGET"])
-        submission_df["SK_ID_CURR"] = unique_identifier
+        submission_df["SK_ID_CURR"] = test_unique_column
         submission_df["TARGET"] = predictions
         submission_df.to_csv(
             os.path.join(self.config_info.DATASET_DIR, "submission.csv"),
@@ -314,6 +317,7 @@ class Pipeline:
                 return
 
             try:
+                train_df, test_df = column_wise(train_df, test_df)
                 self.train_and_test_model(train_df, test_df)
             except Exception as e:
                 print(f"failed to train and test model")

@@ -40,30 +40,30 @@ class Pipeline:
         try:
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"building the logistic regression model")
-            # clf = LogisticRegression(
+            clf = LogisticRegression(
+                random_state=self.model_configuration["random_state"],
+                max_iter=self.model_configuration["max_iter"],
+                # solver="saga",
+                # penalty="elasticnet",
+                # l1_ratio=0.5,
+                # n_jobs=-1,
+            )
+            # clf1 = HistGradientBoostingClassifier(
             #     random_state=self.model_configuration["random_state"],
-            #     max_iter=self.model_configuration["max_iter"],
-            #     # solver="saga",
-            #     # penalty="elasticnet",
-            #     # l1_ratio=0.5,
+            # )
+            # clf2 = AdaBoostClassifier(
+            #    n_estimators=100,
+            #    random_state=self.model_configuration["random_state"],
+            # )
+            # clf3 = GradientBoostingClassifier(
+            #    n_estimators=100,
+            #    random_state=self.model_configuration["random_state"],
+            # )
+            # clf = StackingClassifier(
+            #     estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
+            #     final_estimator=LogisticRegression(),
             #     n_jobs=-1,
             # )
-            clf1 = HistGradientBoostingClassifier(
-                random_state=self.model_configuration["random_state"],
-            )
-            clf2 = AdaBoostClassifier(
-               n_estimators=100,
-               random_state=self.model_configuration["random_state"],
-            )
-            clf3 = GradientBoostingClassifier(
-               n_estimators=100,
-               random_state=self.model_configuration["random_state"],
-            )
-            clf = StackingClassifier(
-                estimators=[('rf', clf1), ('ada', clf2), ('gtb', clf3)],
-                final_estimator=LogisticRegression(),
-                n_jobs=-1,
-            )
             logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                         f"successfully built logistic regression model")
         except Exception as e:
@@ -101,7 +101,6 @@ class Pipeline:
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing data")
 
-        train_df = train_df.reset_index(drop=True)
         predictors = train_df.iloc[:, :-1]
         labels = train_df.iloc[:, -1]
         # predictors, labels = preprocess_data(train_df,
@@ -129,14 +128,13 @@ class Pipeline:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
                 f"model - iteration {iter}")
-
-            X_train, X_val = predictors.iloc[train_indices, :], predictors.iloc[val_indices, :]
-            y_train, y_val = labels[train_indices], labels[val_indices]
-            clf.fit(X_train.values, y_train.values)
+            X_train, X_val = predictors.iloc[train_indices], predictors.iloc[val_indices]
+            y_train, y_val = labels.loc[train_indices], labels.loc[val_indices]
+            clf.fit(X_train, y_train)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} complete "
                 f"training model - iteration {iter}")
-            y_predict = clf.predict(X_val.iloc[:, :].values)
+            y_predict = clf.predict(X_val)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} calculating "
                 f"classification scores")
@@ -174,7 +172,7 @@ class Pipeline:
                     f"preprocessing test data")
         test_unique_column = test_df[["SK_ID_CURR"]]
         test_new_df_dropped = test_df.drop(columns=["SK_ID_CURR"], axis=1)
-        predictors = test_new_df_dropped.iloc[:, :].values
+        predictors = test_new_df_dropped.iloc[:, :]
 
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")

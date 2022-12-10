@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def column_wise(
         train_df: DataFrame,
         test_df: DataFrame,
-) -> tuple[DataFrame, DataFrame]:
+):
 
     # -------------------------------------------------------------------------
     column_name = "CNT_CHILDREN"
@@ -109,6 +109,7 @@ def column_wise(
     train_df[column_name].fillna(column_mean_without_outliers, inplace=True)
 
     # test data
+    test_df[column_name].fillna(column_mean_without_outliers, inplace=True)
     index_of_outliers = test_df[test_df[column_name] > unique_values[
         index_lowest_outlier_value - 1]].index
     test_df.loc[index_of_outliers, column_name] = unique_values[
@@ -1406,17 +1407,6 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
-    # # -------------------------------------------------------------------------
-    # column_name = "NAME_HOUSING_TYPE"
-    # logger.info(f"Preprocessing column: {column_name}")
-    # # train data
-    # logger.info(f"Since correlation value is too low, hence dropping column")
-    # train_df.drop(columns=[column_name], inplace=True)
-    #
-    # # test data
-    # test_df.drop(columns=[column_name], inplace=True)
-    # # -------------------------------------------------------------------------
-
     # -------------------------------------------------------------------------
     column_name = "NAME_HOUSING_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
@@ -1459,17 +1449,6 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
-    # # -------------------------------------------------------------------------
-    # column_name = "ORGANIZATION_TYPE"
-    # logger.info(f"Preprocessing column: {column_name}")
-    # # train data
-    # logger.info(f"Since correlation value is too low, hence dropping column")
-    # train_df.drop(columns=[column_name], inplace=True)
-    #
-    # # test data
-    # test_df.drop(columns=[column_name], inplace=True)
-    # # -------------------------------------------------------------------------
-
     # -------------------------------------------------------------------------
     column_name = "ORGANIZATION_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
@@ -1504,7 +1483,6 @@ def column_wise(
     train_df[column_name].replace(
         ["Military", "Police", "Security Ministries", "Emergency", "Security"],
         "Security", inplace=True)
-    train_df[column_name].value_counts()
 
     unique_values = train_df[column_name].unique()
     encoder = OneHotEncoder()
@@ -1614,7 +1592,10 @@ def column_wise(
     scaler = StandardScaler()
     scaler.fit(train_to_scale)
     train_scaled = scaler.transform(train_to_scale)
-    train_scaled_df = pd.DataFrame(train_scaled, columns=train_to_scale.columns, index=train_target_column.index)
+    # train_scaled_df = pd.DataFrame(train_scaled, columns=train_to_scale.columns, index=train_target_column.index)
+    train_scaled_df = pd.DataFrame(train_scaled,
+                                   columns=train_to_scale.columns,
+                                   index=train_target_column.index)
     train_scaled_complete_df = pd.concat([train_scaled_df, train_target_column], axis=1)
 
     # test data
@@ -1622,7 +1603,10 @@ def column_wise(
     test_unique_column = test_new_df[["SK_ID_CURR"]]
     test_new_df_dropped = test_new_df.drop(columns=["SK_ID_CURR"], axis=1)
     test_scaled = scaler.transform(test_new_df_dropped)
-    test_scaled_df = pd.DataFrame(test_scaled, columns=test_new_df_dropped.columns, index=test_unique_column.index)
+    # test_scaled_df = pd.DataFrame(test_scaled, columns=test_new_df_dropped.columns, index=test_unique_column.index)
+    test_scaled_df = pd.DataFrame(test_scaled,
+                                  columns=test_new_df_dropped.columns,
+                                  index=test_unique_column.index)
     test_scaled_complete_df = pd.concat([test_scaled_df, test_unique_column], axis=1)
 
     return train_scaled_complete_df, test_scaled_complete_df

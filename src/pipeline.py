@@ -50,7 +50,6 @@ class Pipeline:
             # )
             clf1 = HistGradientBoostingClassifier(
                 random_state=self.model_configuration["random_state"],
-                categorical_features=[1, 2, 3, 4, 10, 11, 12, 13, 14, 27, 31, 39, 85, 86, 88, 89]
             )
             clf2 = AdaBoostClassifier(
                n_estimators=100,
@@ -101,10 +100,14 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing data")
-        predictors, labels = preprocess_data(train_df,
-                                             self.preprocessing_configuration,
-                                             is_train_data=True
-                                             )
+
+        train_df = train_df.reset_index(drop=True)
+        predictors = train_df.iloc[:, :-1]
+        labels = train_df.iloc[:, -1]
+        # predictors, labels = preprocess_data(train_df,
+        #                                      self.preprocessing_configuration,
+        #                                      is_train_data=True
+        #                                      )
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
 
@@ -126,13 +129,14 @@ class Pipeline:
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} training "
                 f"model - iteration {iter}")
-            X_train, X_val = predictors[train_indices], predictors[val_indices]
-            y_train, y_val = labels.loc[train_indices], labels.loc[val_indices]
-            clf.fit(X_train, y_train)
+
+            X_train, X_val = predictors.iloc[train_indices, :], predictors.iloc[val_indices, :]
+            y_train, y_val = labels[train_indices], labels[val_indices]
+            clf.fit(X_train.values, y_train.values)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} complete "
                 f"training model - iteration {iter}")
-            y_predict = clf.predict(X_val)
+            y_predict = clf.predict(X_val.iloc[:, :].values)
             logger.info(
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} calculating "
                 f"classification scores")
@@ -168,10 +172,10 @@ class Pipeline:
         # preprocess the dataset
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing test data")
-        predictors, _ = preprocess_data(test_df,
-                                        self.preprocessing_configuration,
-                                        is_test_data=True
-                                        )
+        test_unique_column = test_df[["SK_ID_CURR"]]
+        test_new_df_dropped = test_df.drop(columns=["SK_ID_CURR"], axis=1)
+        predictors = test_new_df_dropped.iloc[:, :].values
+
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"preprocessing done")
 
@@ -185,7 +189,7 @@ class Pipeline:
         # make predictions
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting on test data")
-        unique_identifier = test_df[["SK_ID_CURR"]]
+
         predictions = clf.predict(predictors)
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"predicting done on test data")
@@ -194,7 +198,7 @@ class Pipeline:
         logger.info(f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')} "
                     f"saving predictions")
         submission_df = pd.DataFrame(columns=["SK_ID_CURR", "TARGET"])
-        submission_df["SK_ID_CURR"] = unique_identifier
+        submission_df["SK_ID_CURR"] = test_unique_column
         submission_df["TARGET"] = predictions
         submission_df.to_csv(
             os.path.join(self.config_info.DATASET_DIR, "submission.csv"),

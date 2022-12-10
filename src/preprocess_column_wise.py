@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
 
 from src.helpers import col_info
 
@@ -1405,6 +1406,17 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # # -------------------------------------------------------------------------
+    # column_name = "NAME_HOUSING_TYPE"
+    # logger.info(f"Preprocessing column: {column_name}")
+    # # train data
+    # logger.info(f"Since correlation value is too low, hence dropping column")
+    # train_df.drop(columns=[column_name], inplace=True)
+    #
+    # # test data
+    # test_df.drop(columns=[column_name], inplace=True)
+    # # -------------------------------------------------------------------------
+
     # -------------------------------------------------------------------------
     column_name = "NAME_HOUSING_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
@@ -1447,6 +1459,17 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
+    # # -------------------------------------------------------------------------
+    # column_name = "ORGANIZATION_TYPE"
+    # logger.info(f"Preprocessing column: {column_name}")
+    # # train data
+    # logger.info(f"Since correlation value is too low, hence dropping column")
+    # train_df.drop(columns=[column_name], inplace=True)
+    #
+    # # test data
+    # test_df.drop(columns=[column_name], inplace=True)
+    # # -------------------------------------------------------------------------
+
     # -------------------------------------------------------------------------
     column_name = "ORGANIZATION_TYPE"
     logger.info(f"Preprocessing column: {column_name}")
@@ -1482,7 +1505,7 @@ def column_wise(
         ["Military", "Police", "Security Ministries", "Emergency", "Security"],
         "Security", inplace=True)
     train_df[column_name].value_counts()
-    
+
     unique_values = train_df[column_name].unique()
     encoder = OneHotEncoder()
     encoded_df = pd.DataFrame(
@@ -1525,7 +1548,7 @@ def column_wise(
         ["Military", "Police", "Security Ministries", "Emergency", "Security"],
         "Security", inplace=True)
     test_df[column_name].value_counts()
-    
+
     encoded_df = pd.DataFrame(
         encoder.transform(test_df[[column_name]]).toarray())
     encoded_df.columns = [column_name + "_" + str(idx) for idx in
@@ -1583,4 +1606,23 @@ def column_wise(
     test_df.drop(columns=[column_name], inplace=True)
     # -------------------------------------------------------------------------
 
-    return train_df, test_df
+    # train_data
+    train_new_df = train_df.copy()
+    train_target_column = train_new_df[["TARGET"]]
+    train_to_scale = train_new_df.drop(columns=["SK_ID_CURR", "TARGET"], axis=1)
+
+    scaler = StandardScaler()
+    scaler.fit(train_to_scale)
+    train_scaled = scaler.transform(train_to_scale)
+    train_scaled_df = pd.DataFrame(train_scaled, columns=train_to_scale.columns, index=train_target_column.index)
+    train_scaled_complete_df = pd.concat([train_scaled_df, train_target_column], axis=1)
+
+    # test data
+    test_new_df = test_df.copy()
+    test_unique_column = test_new_df[["SK_ID_CURR"]]
+    test_new_df_dropped = test_new_df.drop(columns=["SK_ID_CURR"], axis=1)
+    test_scaled = scaler.transform(test_new_df_dropped)
+    test_scaled_df = pd.DataFrame(test_scaled, columns=test_new_df_dropped.columns, index=test_unique_column.index)
+    test_scaled_complete_df = pd.concat([test_scaled_df, test_unique_column], axis=1)
+
+    return train_scaled_complete_df, test_scaled_complete_df

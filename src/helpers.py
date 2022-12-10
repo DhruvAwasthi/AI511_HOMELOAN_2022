@@ -425,7 +425,7 @@ def col_info(df, column_name):
     logger.info(f"Mean without outliers: {column_mean_without_outliers}")
     more_than_mean = list()
     less_than_mean = list()
-    for index, value in df[column_name][index_of_outliers].iteritems():
+    for index, value in df[column_name][index_of_outliers].items():
         if value > mean_of_column:
             if value not in more_than_mean:
                 more_than_mean.append(value)
@@ -436,7 +436,7 @@ def col_info(df, column_name):
     less_than_mean.sort()
     more_than_mean.sort()
     logger.info(f"Less than mean: {len(less_than_mean)}")
-    logger.info(f"More than mean: {len(more_than_mean)}\n")
+    logger.info(f"More than mean: {len(more_than_mean)}")
 
     unique_values = np.sort(df[column_name].unique())
     logger.info(f"Unique values: {len(unique_values)}")

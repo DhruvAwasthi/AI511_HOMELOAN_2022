@@ -27,25 +27,7 @@ Tags: Tabular Data
 2. Member 2:
    1. **Name -** Ashok Senapati
    2. **Roll number -** MS2022004 
-   3. **Email address -** ashok.senapati@iiitb.ac.in 
-  
-
-### Project Evaluation:
-Project will be evaluated based on:
-1. Kaggle metrics
-2. Final report and code
-3. Intermediate evaluations and slack discussions
-  
-### Project Milestones:
-- **First milestone -** Week of October 17th
-- **Second milestone -** Week of November 7th  
-
-  
-### Requirements for First Milestone:
-- Problem understanding
-- First round of preprocessing
-- Plan going forward
-- Presentation with five to ten slides of what you have done
+   3. **Email address -** ashok.senapati@iiitb.ac.in
   
   
 ### Dataset:
@@ -60,3 +42,58 @@ Project will be evaluated based on:
   - Submissions are evaluated on `TARGET` column using the Macro F Score. 
   - For each `SK_ID_CURR` in the test set, you must predict the `TARGET` i.e predict if the customer with that ID will default their loan or not.
 
+### Impactful Notebooks:
+Checkout the following notebooks in `notebooks/` directory:
+1. **2022_11_09_reduce_dataset_size.ipynb**: how to reduce the dataset size for reducing the space complexity and speed up the training.
+2. **2022_12_08_master_eda.ipynb**:  notebook for the final preprocessing steps on training data.  
+
+
+### How to Run Code:
+**1. Create a new environment:**  
+It is always a great idea to create new environment for a new project, so you  
+don't accidentally mess up with other projects that you are working on and 
+requires different version of packages. The steps to create and activate 
+environment using two most popular tools are:  
+
+**- virtualenv**  
+```
+virtualenv ai511_homeloan_2022
+source ai511_homeloan_2022/bin/activate
+```  
+To deactivate type:
+```
+deactivate
+```
+**- conda**  
+```
+conda create -n ai511_homeloan_2022
+conda activate ai511_homeloan_2022
+```
+To deactivate type:
+```
+conda deactivate
+```  
+
+**2. Install the packages:**  
+To install all the packages required for this project:
+```
+pip install -r requirements.txt
+```  
+
+**3. Run the project:**  
+Checkout the branch `eda`:  
+```
+git checkout eda
+```  
+
+To run the entire project, run the following command: 
+```
+python main.py --train_and_test_model=True
+```
+  
+Once done, you can check the `submission.csv` file that contains the predictions in the`data/dataset/` directory.
+
+### Author:  
+- [Dhruv Awasthi](https://www.linkedin.com/in/dhruv-awasthi/)
+- [GitHub profile link](https://github.com/DhruvAwasthi)
+- **Email:** dhruvawasthicc@gmail.com

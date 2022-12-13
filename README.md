@@ -42,11 +42,28 @@ Tags: Tabular Data
   - Submissions are evaluated on `TARGET` column using the Macro F Score. 
   - For each `SK_ID_CURR` in the test set, you must predict the `TARGET` i.e predict if the customer with that ID will default their loan or not.
 
+### Model - Stacked Architecture:
+- We have built a stacked architecture of estimators using:
+  - HistGradientBoostingClassifier
+  - AdaBoostClassifier
+  - GradientBoostingClassifier
+  - LogisticRegression (final estimator)
+- It is a method for combining the estimators to reduce the biases.
+- The predictions of each individual estimator are stacked together and used as input to a final estimator to compute the prediction.
+- The final estimator is trained through cross-validation.  
+  
+
+![Model - Stacked Architecture](../docs/model_architecture.png)
+
+
+### Project Checkpoint Presentations:
+You can view our presentations for each of the three project checkpoints in `docs/` 
+directory that summarises the work we did for each checkpoint.
+
 ### Impactful Notebooks:
 Checkout the following notebooks in `notebooks/` directory:
 1. **2022_11_09_reduce_dataset_size.ipynb**: how to reduce the dataset size for reducing the space complexity and speed up the training.
 2. **2022_12_08_master_eda.ipynb**:  notebook for the final preprocessing steps on training data.  
-
 
 ### How to Run Code:
 **1. Create a new environment:**  

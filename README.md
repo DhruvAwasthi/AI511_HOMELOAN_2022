@@ -53,7 +53,7 @@ Tags: Tabular Data
 - The final estimator is trained through cross-validation.  
   
 
-![Model - Stacked Architecture](../docs/model_architecture.png)
+![Model - Stacked Architecture](https://github.com/DhruvAwasthi/AI511_HOMELOAN_2022/blob/master/docs/model_architecture.png)
 
 
 ### Project Checkpoint Presentations:
